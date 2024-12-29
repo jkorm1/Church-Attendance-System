@@ -24,3 +24,6 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
+Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
+Route::put('/quotes/{id}', [QuoteController::class, 'update'])->name('quotes.update');

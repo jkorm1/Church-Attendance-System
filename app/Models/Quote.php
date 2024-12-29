@@ -29,16 +29,14 @@ class Quote extends Model
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            // Define any attributes that need to be cast
-        ];
-    }
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
-    // Optionally, you can define relationships here if needed
+    // You can define more relationships or methods here if needed
 }
