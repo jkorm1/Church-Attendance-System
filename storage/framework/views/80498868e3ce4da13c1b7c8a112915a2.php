@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Your Portfolio') }}</title>
+    <title><?php echo e(config('app.name', 'Your Portfolio')); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -40,6 +40,9 @@
             <a href="#skills" class="hover:text-purple-300 transition-colors">Skills</a>
             <a href="#contact" class="hover:text-purple-300 transition-colors">Contact</a>
         </div>
+        
+        <!-- Authentication -->
+        
     </nav>
     
     <!-- Hero Section -->
@@ -112,7 +115,7 @@
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold mb-10 text-center">My Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @php
+                <?php
                     $projects = [
                         [
                             'title' => 'E-Commerce Platform',
@@ -164,35 +167,36 @@
                             'figma' => 'https://figma.com/file/task-manager-design'
                         ]
                     ];
-                @endphp
+                ?>
 
-                @foreach ($projects as $project)
+                <?php $__currentLoopData = $projects; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $project): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="overflow-hidden bg-white/10 border border-purple-500/30 hover:border-purple-500/70 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 h-full flex flex-col rounded-lg">
                     <div class="relative overflow-hidden h-48">
                         <img 
-                            src="{{ $project['image'] }}" 
-                            alt="{{ $project['title'] }}" 
+                            src="<?php echo e($project['image']); ?>" 
+                            alt="<?php echo e($project['title']); ?>" 
                             class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                         />
                     </div>
                     <div class="p-6 pb-2">
-                        <h3 class="text-xl font-bold text-white">{{ $project['title'] }}</h3>
+                        <h3 class="text-xl font-bold text-white"><?php echo e($project['title']); ?></h3>
                     </div>
                     <div class="p-6 pt-0 flex-grow">
-                        <p class="text-gray-200 mb-4">{{ $project['description'] }}</p>
+                        <p class="text-gray-200 mb-4"><?php echo e($project['description']); ?></p>
                         <div class="flex flex-wrap gap-2 mt-4">
-                            @foreach ($project['tags'] as $tag)
+                            <?php $__currentLoopData = $project['tags']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <span class="bg-purple-500/20 text-purple-200 border border-purple-500/50 px-3 py-1 rounded-full text-xs">
-                                    {{ $tag }}
+                                    <?php echo e($tag); ?>
+
                                 </span>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                     <div class="border-t border-purple-500/30 p-6 pt-4 flex justify-between">
                         <div class="flex space-x-3">
-                            @if (isset($project['github']))
+                            <?php if(isset($project['github'])): ?>
                                 <a 
-                                    href="{{ $project['github'] }}" 
+                                    href="<?php echo e($project['github']); ?>" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     class="text-gray-300 hover:text-white transition-colors"
@@ -200,10 +204,10 @@
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                                 </a>
-                            @endif
-                            @if (isset($project['figma']))
+                            <?php endif; ?>
+                            <?php if(isset($project['figma'])): ?>
                                 <a 
-                                    href="{{ $project['figma'] }}" 
+                                    href="<?php echo e($project['figma']); ?>" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     class="text-gray-300 hover:text-white transition-colors"
@@ -211,10 +215,10 @@
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-figma"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"></path><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z"></path><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"></path><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"></path><path d="M12 16h3.5a3.5 3.5 0 1 1 0 7H12v-7z"></path></svg>
                                 </a>
-                            @endif
-                            @if (isset($project['live']))
+                            <?php endif; ?>
+                            <?php if(isset($project['live'])): ?>
                                 <a 
-                                    href="{{ $project['live'] }}" 
+                                    href="<?php echo e($project['live']); ?>" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     class="text-gray-300 hover:text-white transition-colors"
@@ -222,11 +226,11 @@
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                                 </a>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </section>
@@ -239,7 +243,7 @@
             <div class="mb-12">
                 <h3 class="text-2xl font-semibold mb-6">Frontend</h3>
                 <div class="flex flex-wrap gap-4">
-                    @php
+                    <?php
                         $frontendSkills = [
                             ['name' => 'HTML5', 'level' => 90],
                             ['name' => 'CSS3', 'level' => 85],
@@ -249,28 +253,28 @@
                             ['name' => 'TailwindCSS', 'level' => 90],
                             ['name' => 'Livewire', 'level' => 75]
                         ];
-                    @endphp
+                    ?>
 
-                    @foreach ($frontendSkills as $skill)
+                    <?php $__currentLoopData = $frontendSkills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $skill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="bg-white/10 rounded-full px-4 py-2 border border-purple-500/30 hover:border-purple-500/70 transition-all duration-300">
                             <div class="flex flex-col">
-                                <span class="font-medium">{{ $skill['name'] }}</span>
+                                <span class="font-medium"><?php echo e($skill['name']); ?></span>
                                 <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
                                     <div 
                                         class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" 
-                                        style="width: {{ $skill['level'] }}%"
+                                        style="width: <?php echo e($skill['level']); ?>%"
                                     ></div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
             
             <div class="mb-12">
                 <h3 class="text-2xl font-semibold mb-6">Backend</h3>
                 <div class="flex flex-wrap gap-4">
-                    @php
+                    <?php
                         $backendSkills = [
                             ['name' => 'PHP', 'level' => 90],
                             ['name' => 'Laravel', 'level' => 85],
@@ -279,28 +283,28 @@
                             ['name' => 'Firebase', 'level' => 70],
                             ['name' => 'Redis', 'level' => 65]
                         ];
-                    @endphp
+                    ?>
 
-                    @foreach ($backendSkills as $skill)
+                    <?php $__currentLoopData = $backendSkills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $skill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="bg-white/10 rounded-full px-4 py-2 border border-purple-500/30 hover:border-purple-500/70 transition-all duration-300">
                             <div class="flex flex-col">
-                                <span class="font-medium">{{ $skill['name'] }}</span>
+                                <span class="font-medium"><?php echo e($skill['name']); ?></span>
                                 <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
                                     <div 
                                         class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" 
-                                        style="width: {{ $skill['level'] }}%"
+                                        style="width: <?php echo e($skill['level']); ?>%"
                                     ></div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
             
             <div class="mb-12">
                 <h3 class="text-2xl font-semibold mb-6">Tools & Others</h3>
                 <div class="flex flex-wrap gap-4">
-                    @php
+                    <?php
                         $otherSkills = [
                             ['name' => 'Git', 'level' => 85],
                             ['name' => 'Docker', 'level' => 70],
@@ -309,21 +313,21 @@
                             ['name' => 'CI/CD', 'level' => 70],
                             ['name' => 'Testing', 'level' => 75]
                         ];
-                    @endphp
+                    ?>
 
-                    @foreach ($otherSkills as $skill)
+                    <?php $__currentLoopData = $otherSkills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $skill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="bg-white/10 rounded-full px-4 py-2 border border-purple-500/30 hover:border-purple-500/70 transition-all duration-300">
                             <div class="flex flex-col">
-                                <span class="font-medium">{{ $skill['name'] }}</span>
+                                <span class="font-medium"><?php echo e($skill['name']); ?></span>
                                 <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
                                     <div 
                                         class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" 
-                                        style="width: {{ $skill['level'] }}%"
+                                        style="width: <?php echo e($skill['level']); ?>%"
                                     ></div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </div>
@@ -364,7 +368,7 @@
                     
                     <div class="md:w-1/2">
                         <form action="/contact" method="POST" class="space-y-4">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <div>
                                 <label for="name" class="block mb-2">Name</label>
                                 <input 
@@ -425,7 +429,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
                 </a>
             </div>
-            <p>© {{ date('Y') }} Your Name. All rights reserved.</p>
+            <p>© <?php echo e(date('Y')); ?> Your Name. All rights reserved.</p>
         </div>
     </footer>
 
@@ -508,3 +512,4 @@
 </body>
 </html>
 
+<?php /**PATH C:\Users\Joseph Korm\Desktop\Portfolio\portfolio\resources\views/welcome.blade.php ENDPATH**/ ?>

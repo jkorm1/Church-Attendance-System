@@ -1,29 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MemeController;
-use App\Http\Controllers\QuoteController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\ProfileController;
 
-// Default route for the welcome page
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
 Route::get('/', function () {
-    return view('welcome'); // This is the default landing page
+    return view('welcome');
 });
-
-// Route for displaying memes
-Route::get('/memes', [MemeController::class, 'index']);
-
-// Route for displaying quotes
-Route::get('/quotes', [QuoteController::class, 'index']);
-
-// Auth routes
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
-Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
-Route::put('/quotes/{id}', [QuoteController::class, 'update'])->name('quotes.update');
