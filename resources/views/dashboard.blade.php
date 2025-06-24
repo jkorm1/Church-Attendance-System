@@ -28,7 +28,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Total Members</div>
-                                <div class="text-2xl font-semibold text-gray-900">{{ \App\Models\Member::count() }}</div>
+                                <div class="text-2xl font-semibold text-gray-900">{{ $totalMembers }}</div>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Active Members</div>
-                                <div class="text-2xl font-semibold text-gray-900">{{ \App\Models\Member::where('status', 'active')->count() }}</div>
+                                <div class="text-2xl font-semibold text-gray-900">{{ $activeMembers }}</div>
                             </div>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Upcoming Services</div>
-                                <div class="text-2xl font-semibold text-gray-900">{{ count(app('App\Services\ServiceGeneratorService')->getAllServices()) }}</div>
+                                <div class="text-2xl font-semibold text-gray-900">{{ $upcomingServiceCount }}</div>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-500">Attendance Records</div>
-                                <div class="text-2xl font-semibold text-gray-900">{{ \App\Models\Attendance::count() }}</div>
+                                <div class="text-2xl font-semibold text-gray-900">{{ $totalAttendance }}</div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                         <div class="p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
                             <div class="space-y-3">
-                                <a href="{{ route('attendance.services') }}" class="flex items-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                                <a href="{{ route('services.index') }}" class="flex items-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
                                     <svg class="h-5 w-5 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                                     </svg>
@@ -135,9 +135,13 @@
                                                 <div class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($service['service_date'])->format('M j, Y') }}</div>
                                             </div>
                                         </div>
-                                        <a href="{{ route('attendance.index', $service['id']) }}" class="text-xs text-blue-600 hover:text-blue-800">
-                                            Take Attendance
-                                        </a>
+                                        @if(isset($service['id']))
+                                            <a href="{{ route('attendance.index', $service['id']) }}" class="text-xs text-blue-600 hover:text-blue-800">
+                                                Take Attendance
+                                            </a>
+                                        @else
+                                            <span class="text-xs text-gray-400 cursor-not-allowed">Take Attendance</span>
+                                        @endif
                                     </div>
                                 @empty
                                     <div class="text-center text-gray-500 py-4">
@@ -189,7 +193,7 @@
             </div>
 
             <!-- Getting Started Section (if no data) -->
-            @if(\App\Models\Member::count() == 0)
+            @if($totalMembers == 0)
                 <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
@@ -202,7 +206,7 @@
                             <p class="text-blue-700">Welcome to your church attendance system! To get started:</p>
                             <div class="mt-2 space-y-1 text-sm text-blue-600">
                                 <p>1. <a href="{{ route('members.create') }}" class="underline">Add your first member</a></p>
-                                <p>2. <a href="{{ route('attendance.services') }}" class="underline">Take attendance for upcoming services</a></p>
+                                <p>2. <a href="{{ route('services.index') }}" class="underline">Take attendance for upcoming services</a></p>
                                 <p>3. View statistics and reports on this dashboard</p>
                             </div>
                         </div>

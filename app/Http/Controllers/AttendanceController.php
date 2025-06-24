@@ -24,11 +24,7 @@ class AttendanceController extends Controller
      */
     public function index($service_id)
     {
-        // Check authorization
         $user = auth()->user();
-        if (!$user->isAdmin() && !$user->isCellLeader() && !$user->isFoldLeader()) {
-            abort(403, 'You do not have permission to access attendance.');
-        }
 
         try {
             // Check if it's an auto-generated service
@@ -43,22 +39,14 @@ class AttendanceController extends Controller
                 // Handle database service
                 $service = Service::findOrFail($service_id);
             }
-            
-            // Filter members based on user's role and leadership
-            if ($user->isAdmin()) {
-                $members = Member::orderBy('name')->get();
-            } elseif ($user->isCellLeader()) {
-                $cell = $user->getLedCell();
-                $members = $cell ? $cell->members()->orderBy('name')->get() : collect([]);
-            } elseif ($user->isFoldLeader()) {
-                $fold = $user->getLedFold();
-                $members = $fold ? $fold->members()->orderBy('name')->get() : collect([]);
-            } else {
-                $members = collect([]);
-            }
-            
-            $attendance = Attendance::where('service_id', $service_id)->pluck('present', 'member_id');
-            
+
+            // Use the centralized method to get manageable members
+            $members = $user->getManageableMembers()->orderBy('name')->get();
+
+            $attendance = Attendance::where('service_id', $service_id)
+                ->whereIn('member_id', $members->pluck('id')) // Filter attendance for manageable members
+                ->pluck('present', 'member_id');
+
             return view('attendance.index', compact('service', 'members', 'attendance'));
         } catch (\Exception $e) {
             return back()->with('error', 'Error loading attendance: ' . $e->getMessage());
@@ -71,8 +59,9 @@ class AttendanceController extends Controller
     public function create()
     {
         $services = Service::orderBy('service_date', 'desc')->get();
-        $members = Member::orderBy('name')->get();
-        
+        // Use the centralized method to get manageable members
+        $members = auth()->user()->getManageableMembers()->orderBy('name')->get();
+
         return view('attendance.create', compact('services', 'members'));
     }
 
@@ -86,6 +75,9 @@ class AttendanceController extends Controller
             'member_id' => 'required|exists:members,id',
             'present' => 'required|boolean',
         ]);
+
+        // Authorization check
+        $this->authorize('manage', Member::findOrFail($request->member_id));
 
         try {
             Attendance::updateOrCreate(
@@ -109,6 +101,7 @@ class AttendanceController extends Controller
      */
     public function show(Attendance $attendance)
     {
+        $this->authorize('view', $attendance);
         return view('attendance.show', compact('attendance'));
     }
 
@@ -117,9 +110,11 @@ class AttendanceController extends Controller
      */
     public function edit(Attendance $attendance)
     {
+        $this->authorize('update', $attendance);
         $services = Service::orderBy('service_date', 'desc')->get();
-        $members = Member::orderBy('name')->get();
-        
+        // Use the centralized method to get manageable members
+        $members = auth()->user()->getManageableMembers()->orderBy('name')->get();
+
         return view('attendance.edit', compact('attendance', 'services', 'members'));
     }
 
@@ -128,6 +123,7 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, Attendance $attendance)
     {
+        $this->authorize('update', $attendance);
         $request->validate([
             'service_id' => 'required|string',
             'member_id' => 'required|exists:members,id',
@@ -153,6 +149,7 @@ class AttendanceController extends Controller
      */
     public function destroy(Attendance $attendance)
     {
+        $this->authorize('delete', $attendance);
         try {
             $service_id = $attendance->service_id;
             $attendance->delete();
@@ -164,94 +161,69 @@ class AttendanceController extends Controller
         }
     }
 
-    // Mark a member as present for a service
-    public function present($service_id, $member_id)
+    /**
+     * Mark a member's attendance status for a service.
+     */
+    public function mark(Request $request, $service_id, $member_id)
     {
-        // Check authorization
-        $user = auth()->user();
-        if (!$user->isAdmin() && !$user->isCellLeader() && !$user->isFoldLeader()) {
-            abort(403, 'You do not have permission to mark attendance.');
-        }
+        $request->validate(['present' => 'required|boolean']);
+
+        $member = Member::findOrFail($member_id);
+        $this->authorize('manage', $member);
 
         try {
             Attendance::updateOrCreate(
-                [
-                    'service_id' => $service_id,
-                    'member_id' => $member_id,
-                ],
-                [
-                    'present' => true,
-                ]
+                ['service_id' => $service_id, 'member_id' => $member_id],
+                ['present' => $request->present]
             );
-            return back()->with('success', 'Marked present!');
+            $status = $request->present ? 'present' : 'absent';
+            return back()->with('success', "Marked {$status}!");
         } catch (\Exception $e) {
-            return back()->with('error', 'Error marking present: ' . $e->getMessage());
+            return back()->with('error', "Error marking {$status}: " . $e->getMessage());
         }
     }
 
-    // Mark a member as absent for a service
-    public function absent($service_id, $member_id)
-    {
-        // Check authorization
-        $user = auth()->user();
-        if (!$user->isAdmin() && !$user->isCellLeader() && !$user->isFoldLeader()) {
-            abort(403, 'You do not have permission to mark attendance.');
-        }
-
-        try {
-            Attendance::updateOrCreate(
-                [
-                    'service_id' => $service_id,
-                    'member_id' => $member_id,
-                ],
-                [
-                    'present' => false,
-                ]
-            );
-            return back()->with('success', 'Marked absent!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Error marking absent: ' . $e->getMessage());
-        }
-    }
-
-    // Bulk update attendance for multiple members
+    /**
+     * Bulk update attendance for a service.
+     */
     public function bulkUpdate(Request $request, $service_id)
     {
-        // Check authorization
-        $user = auth()->user();
-        if (!$user->isAdmin() && !$user->isCellLeader() && !$user->isFoldLeader()) {
-            abort(403, 'You do not have permission to update attendance.');
-        }
-
         $request->validate([
             'attendance' => 'required|array',
-            'attendance.*' => 'boolean',
+            'attendance.*.member_id' => 'required|exists:members,id',
+            'attendance.*.present' => 'required|boolean',
         ]);
 
+        $user = auth()->user();
+        $manageableMemberIds = $user->getManageableMembers()->pluck('id');
+
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
-            
-            foreach ($request->attendance as $member_id => $present) {
+            foreach ($request->attendance as $attData) {
+                // Ensure user can manage this member
+                if (!$manageableMemberIds->contains($attData['member_id'])) {
+                    throw new \Exception("You do not have permission to update attendance for member ID {$attData['member_id']}.");
+                }
+
                 Attendance::updateOrCreate(
                     [
                         'service_id' => $service_id,
-                        'member_id' => $member_id,
+                        'member_id' => $attData['member_id'],
                     ],
-                    [
-                        'present' => $present,
-                    ]
+                    ['present' => $attData['present']]
                 );
             }
-            
             DB::commit();
-            return back()->with('success', 'Attendance updated for all members!');
+            return back()->with('success', 'Attendance updated successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error updating attendance: ' . $e->getMessage());
         }
     }
 
-    // Finalize attendance: mark all unmarked members as absent
+    /**
+     * Finalize attendance for a service (and create the service if it was auto-generated).
+     */
     public function finalize($service_id)
     {
         // Check authorization

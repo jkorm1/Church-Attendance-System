@@ -18,7 +18,7 @@
                     <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
                         {{ __('Members') }}
                     </x-nav-link>
-                    @if(auth()->user()->isAdmin() || auth()->user()->isCellLeader())
+                    @if(auth()->user()->isAdmin())
                         <x-nav-link :href="route('folds.index')" :active="request()->routeIs('folds.*')">
                             {{ __('Folds') }}
                         </x-nav-link>
@@ -33,11 +33,8 @@
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                            <a href="{{ route('attendance.services') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <a href="{{ route('services.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 {{ __('Services') }}
-                            </a>
-                            <a href="{{ route('members.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                {{ __('Manage Members') }}
                             </a>
                         </div>
                     </div>
@@ -99,7 +96,12 @@
             <x-responsive-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
                 {{ __('Members') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('attendance.services')" :active="request()->routeIs('attendance.*')">
+            @if(auth()->user()->isAdmin())
+                <x-responsive-nav-link :href="route('folds.index')" :active="request()->routeIs('folds.*')">
+                    {{ __('Folds') }}
+                </x-responsive-nav-link>
+            @endif
+            <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.*')">
                 {{ __('Attendance') }}
             </x-responsive-nav-link>
         </div>

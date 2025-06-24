@@ -17,6 +17,8 @@
                     <th class="px-4 py-2 border">Gender</th>
                     <th class="px-4 py-2 border">Phone</th>
                     <th class="px-4 py-2 border">Status</th>
+                    <th class="px-4 py-2 border">Cell</th>
+                    <th class="px-4 py-2 border">Fold</th>
                     <th class="px-4 py-2 border">First Visit</th>
                     <th class="px-4 py-2 border">Actions</th>
                 </tr>
@@ -28,6 +30,8 @@
                     <td class="px-4 py-2 border">{{ $member->gender }}</td>
                     <td class="px-4 py-2 border">{{ $member->phone }}</td>
                     <td class="px-4 py-2 border">{{ ucfirst($member->status) }}</td>
+                    <td class="px-4 py-2 border">{{ $member->cell->name ?? 'N/A' }}</td>
+                    <td class="px-4 py-2 border">{{ $member->fold->name ?? 'N/A' }}</td>
                     <td class="px-4 py-2 border">{{ $member->first_visit_date }}</td>
                     <td class="px-4 py-2 border">
                         <a href="{{ route('members.edit', $member) }}" class="text-blue-600 hover:underline">Edit</a>

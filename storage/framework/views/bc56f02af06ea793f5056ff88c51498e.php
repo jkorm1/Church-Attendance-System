@@ -1,95 +1,154 @@
 
 
 <?php $__env->startSection('content'); ?>
-<div class="container mx-auto py-6 max-w-lg">
+<div class="container mx-auto py-6 max-w-4xl">
     <h1 class="text-2xl font-bold mb-4">Add Member</h1>
-    <?php
-        $user = Auth::user();
-        $isAdmin = $user && $user->isAdmin();
-        $cells = \App\Models\Cell::orderBy('name')->get();
-        $folds = \App\Models\Fold::orderBy('name')->get();
-    ?>
+    
+    <?php if(session('error')): ?>
+        <div class="bg-red-500 text-white p-4 rounded mb-4">
+            <?php echo e(session('error')); ?>
+
+        </div>
+    <?php endif; ?>
+
     <form action="<?php echo e(route('members.store')); ?>" method="POST" class="space-y-4">
         <?php echo csrf_field(); ?>
-        <div>
-            <label class="block font-medium">Name</label>
-            <input type="text" name="name" class="w-full border rounded px-3 py-2" required>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block font-medium">Name</label>
+                <input type="text" name="name" class="w-full border rounded px-3 py-2" value="<?php echo e(old('name')); ?>" required>
+            </div>
+            <div>
+                <label class="block font-medium">Phone</label>
+                <input type="text" name="phone" class="w-full border rounded px-3 py-2" value="<?php echo e(old('phone')); ?>">
+            </div>
+            <div>
+                <label class="block font-medium">Gender</label>
+                <select name="gender" class="w-full border rounded px-3 py-2">
+                    <option value="">Select Gender</option>
+                    <option value="Male" <?php if(old('gender') == 'Male'): ?> selected <?php endif; ?>>Male</option>
+                    <option value="Female" <?php if(old('gender') == 'Female'): ?> selected <?php endif; ?>>Female</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-medium">Status</label>
+                <select name="status" class="w-full border rounded px-3 py-2" required>
+                    <option value="member" <?php if(old('status') == 'member'): ?> selected <?php endif; ?>>Member</option>
+                    <option value="first_timer" <?php if(old('status') == 'first_timer'): ?> selected <?php endif; ?>>First Timer</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-medium">Cell</label>
+                <select name="cell_id" id="cell_id" class="w-full border rounded px-3 py-2">
+                    <option value="">Select Cell</option>
+                    <?php $__currentLoopData = $cells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($cell->id); ?>" <?php if(old('cell_id') == $cell->id): ?> selected <?php endif; ?>><?php echo e($cell->name); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="fold_id" class="block text-sm font-medium text-gray-700">Fold</label>
+                <select name="fold_id" id="fold_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                    <option value="">Select a cell first</option>
+                </select>
+            </div>
+            <div>
+                <label class="block font-medium">First Visit Date</label>
+                <input type="date" name="first_visit_date" class="w-full border rounded px-3 py-2" value="<?php echo e(old('first_visit_date')); ?>">
+            </div>
         </div>
-        <div>
-            <label class="block font-medium">Gender</label>
-            <select name="gender" class="w-full border rounded px-3 py-2">
-                <option value="">Select</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
-        </div>
-        <div>
-            <label class="block font-medium">Phone</label>
-            <input type="text" name="phone" class="w-full border rounded px-3 py-2">
-        </div>
-        <div>
-            <label class="block font-medium">Status</label>
-            <select name="status" class="w-full border rounded px-3 py-2">
-                <option value="first_timer">First Timer</option>
-                <option value="associate">Associate</option>
-                <option value="member">Member</option>
-            </select>
-        </div>
-        <div>
-            <label class="block font-medium">Invited By (Member ID)</label>
-            <input type="number" name="invited_by" class="w-full border rounded px-3 py-2">
-        </div>
-        <div>
-            <label class="block font-medium">First Visit Date</label>
-            <input type="date" name="first_visit_date" class="w-full border rounded px-3 py-2">
-        </div>
+        
         <div>
             <label class="block font-medium">Notes</label>
-            <textarea name="notes" class="w-full border rounded px-3 py-2"></textarea>
+            <textarea name="notes" class="w-full border rounded px-3 py-2"><?php echo e(old('notes')); ?></textarea>
         </div>
-        <?php if($isAdmin): ?>
-            <div>
-                <label class="block font-medium">Assign as Cell Leader</label>
-                <select name="cell_leader_of" class="w-full border rounded px-3 py-2">
-                    <option value="">None</option>
-                    <?php $__currentLoopData = $cells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($cell->id); ?>"><?php echo e($cell->name); ?></option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </select>
+        
+        <?php if(auth()->user()->isAdmin()): ?>
+        <div class="border-t pt-6 mt-6">
+            <h3 class="text-lg font-bold mb-4">Leadership Assignment</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block font-medium">Cell Leader Of</label>
+                    <select name="cell_leader_of" class="w-full border rounded px-3 py-2">
+                        <option value="">None</option>
+                        <?php $__currentLoopData = $cells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($cell->id); ?>" <?php if(old('cell_leader_of') == $cell->id): ?> selected <?php endif; ?>><?php echo e($cell->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium">Assistant Cell Leader Of</label>
+                    <select name="assistant_cell_leader_of" class="w-full border rounded px-3 py-2">
+                        <option value="">None</option>
+                        <?php $__currentLoopData = $cells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($cell->id); ?>" <?php if(old('assistant_cell_leader_of') == $cell->id): ?> selected <?php endif; ?>><?php echo e($cell->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium">Fold Leader Of</label>
+                    <select name="fold_leader_of" class="w-full border rounded px-3 py-2">
+                        <option value="">None</option>
+                        <?php $__currentLoopData = $folds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fold): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($fold->id); ?>" <?php if(old('fold_leader_of') == $fold->id): ?> selected <?php endif; ?>><?php echo e($fold->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium">Assistant Fold Leader Of</label>
+                    <select name="assistant_fold_leader_of" class="w-full border rounded px-3 py-2">
+                        <option value="">None</option>
+                        <?php $__currentLoopData = $folds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fold): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($fold->id); ?>" <?php if(old('assistant_fold_leader_of') == $fold->id): ?> selected <?php endif; ?>><?php echo e($fold->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
             </div>
-            <div>
-                <label class="block font-medium">Assign as Assistant Cell Leader</label>
-                <select name="assistant_cell_leader_of" class="w-full border rounded px-3 py-2">
-                    <option value="">None</option>
-                    <?php $__currentLoopData = $cells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($cell->id); ?>"><?php echo e($cell->name); ?></option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </select>
-            </div>
-            <div>
-                <label class="block font-medium">Assign as Fold Leader</label>
-                <select name="fold_leader_of" class="w-full border rounded px-3 py-2">
-                    <option value="">None</option>
-                    <?php $__currentLoopData = $folds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fold): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($fold->id); ?>"><?php echo e($fold->name); ?></option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </select>
-            </div>
-            <div>
-                <label class="block font-medium">Assign as Assistant Fold Leader</label>
-                <select name="assistant_fold_leader_of" class="w-full border rounded px-3 py-2">
-                    <option value="">None</option>
-                    <?php $__currentLoopData = $folds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fold): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($fold->id); ?>"><?php echo e($fold->name); ?></option>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </select>
-            </div>
+        </div>
         <?php endif; ?>
+
         <div class="flex justify-between">
             <a href="<?php echo e(route('members.index')); ?>" class="text-gray-600">Cancel</a>
-            <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Save</button>
+            <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Add Member</button>
         </div>
     </form>
 </div>
-<?php $__env->stopSection(); ?> 
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cellSelect = document.getElementById('cell_id');
+        const foldSelect = document.getElementById('fold_id');
+
+        cellSelect.addEventListener('change', function () {
+            const cellId = this.value;
+            foldSelect.innerHTML = '<option value="">Loading...</option>';
+
+            if (!cellId) {
+                foldSelect.innerHTML = '<option value="">Select a cell first</option>';
+                return;
+            }
+
+            fetch(`/api/cells/${cellId}/folds`)
+                .then(response => response.json())
+                .then(data => {
+                    foldSelect.innerHTML = '<option value="">Select a fold</option>';
+                    data.forEach(fold => {
+                        const option = document.createElement('option');
+                        option.value = fold.id;
+                        option.textContent = fold.name;
+                        foldSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading folds:', error);
+                    foldSelect.innerHTML = '<option value="">Could not load folds</option>';
+                });
+        });
+    });
+</script>
+<?php $__env->stopPush(); ?>
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/members/create.blade.php ENDPATH**/ ?>

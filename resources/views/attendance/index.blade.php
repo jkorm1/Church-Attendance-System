@@ -8,7 +8,7 @@
             <a href="{{ route('attendance.export', $service->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 Export CSV
             </a>
-            <a href="{{ route('attendance.services') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            <a href="{{ route('services.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                 Back to Services
             </a>
         </div>
@@ -97,21 +97,34 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             @if(!isset($attendance[$member->id]))
                                 <div class="flex space-x-2">
-                                    <form action="{{ route('attendance.present', [$service->id, $member]) }}" method="POST" class="inline">
+                                    <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">
+                                        <input type="hidden" name="present" value="1">
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded hover:bg-green-600">Present</button>
+                                    </form>
+                                    <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="present" value="0">
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-red-500 rounded hover:bg-red-600">Absent</button>
+                                    </form>
+                                </div>
+                            @else
+                                <div class="flex space-x-2">
+                                    <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="present" value="1">
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white rounded {{ isset($attendance[$member->id]) && $attendance[$member->id] ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600' }}" {{ isset($attendance[$member->id]) && $attendance[$member->id] ? 'disabled' : '' }}>
                                             Present
                                         </button>
                                     </form>
-                                    <form action="{{ route('attendance.absent', [$service->id, $member]) }}" method="POST" class="inline">
+                                    <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">
+                                        <input type="hidden" name="present" value="0">
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white rounded {{ isset($attendance[$member->id]) && !$attendance[$member->id] ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600' }}" {{ isset($attendance[$member->id]) && !$attendance[$member->id] ? 'disabled' : '' }}>
                                             Absent
                                         </button>
                                     </form>
                                 </div>
-                            @else
-                                <span class="text-gray-400 text-xs">Marked</span>
                             @endif
                         </td>
                     </tr>

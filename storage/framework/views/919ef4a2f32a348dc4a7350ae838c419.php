@@ -33,6 +33,7 @@
                 <?php echo $__env->yieldContent('content'); ?>
             </main>
         </div>
+        <?php echo $__env->yieldPushContent('scripts'); ?>
     </body>
 </html>
 <?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/layouts/app.blade.php ENDPATH**/ ?>

@@ -19,15 +19,18 @@ class MemberController extends Controller
     {
         $user = auth()->user();
         
+        // Base query with eager loading
+        $query = Member::with(['cell', 'fold'])->orderBy('name');
+
         // Filter members based on user's role and leadership
         if ($user->isAdmin()) {
-            $members = Member::orderBy('name')->paginate(20);
+            $members = $query->paginate(20);
         } elseif ($user->isCellLeader()) {
             $cell = $user->getLedCell();
-            $members = $cell ? $cell->members()->orderBy('name')->paginate(20) : collect([]);
+            $members = $cell ? $query->where('cell_id', $cell->id)->paginate(20) : collect([]);
         } elseif ($user->isFoldLeader()) {
             $fold = $user->getLedFold();
-            $members = $fold ? $fold->members()->orderBy('name')->paginate(20) : collect([]);
+            $members = $fold ? $query->where('fold_id', $fold->id)->paginate(20) : collect([]);
         } else {
             $members = collect([]);
         }
@@ -40,7 +43,9 @@ class MemberController extends Controller
      */
     public function create()
     {
-        return view('members.create');
+        $cells = Cell::orderBy('name')->get();
+        $folds = Fold::orderBy('name')->get();
+        return view('members.create', compact('cells', 'folds'));
     }
 
     /**
@@ -56,10 +61,12 @@ class MemberController extends Controller
             'invited_by' => 'nullable|exists:members,id',
             'first_visit_date' => 'nullable|date',
             'notes' => 'nullable|string',
-            'cell_leader_of' => 'nullable|exists:cells,id',
-            'assistant_cell_leader_of' => 'nullable|exists:cells,id',
-            'fold_leader_of' => 'nullable|exists:folds,id',
-            'assistant_fold_leader_of' => 'nullable|exists:folds,id',
+            'cell_id' => 'nullable|exists:cells,id',
+            'fold_id' => 'nullable|exists:folds,id',
+            'cell_leader_of' => 'nullable|sometimes|exists:cells,id',
+            'assistant_cell_leader_of' => 'nullable|sometimes|exists:cells,id',
+            'fold_leader_of' => 'nullable|sometimes|exists:folds,id',
+            'assistant_fold_leader_of' => 'nullable|sometimes|exists:folds,id',
         ]);
 
         try {
@@ -110,7 +117,9 @@ class MemberController extends Controller
      */
     public function edit(Member $member)
     {
-        return view('members.edit', compact('member'));
+        $cells = Cell::orderBy('name')->get();
+        $folds = Fold::orderBy('name')->get();
+        return view('members.edit', compact('member', 'cells', 'folds'));
     }
 
     /**
@@ -126,10 +135,12 @@ class MemberController extends Controller
             'invited_by' => 'nullable|exists:members,id',
             'first_visit_date' => 'nullable|date',
             'notes' => 'nullable|string',
-            'cell_leader_of' => 'nullable|exists:cells,id',
-            'assistant_cell_leader_of' => 'nullable|exists:cells,id',
-            'fold_leader_of' => 'nullable|exists:folds,id',
-            'assistant_fold_leader_of' => 'nullable|exists:folds,id',
+            'cell_id' => 'nullable|exists:cells,id',
+            'fold_id' => 'nullable|exists:folds,id',
+            'cell_leader_of' => 'nullable|sometimes|exists:cells,id',
+            'assistant_cell_leader_of' => 'nullable|sometimes|exists:cells,id',
+            'fold_leader_of' => 'nullable|sometimes|exists:folds,id',
+            'assistant_fold_leader_of' => 'nullable|sometimes|exists:folds,id',
         ]);
 
         try {
@@ -181,41 +192,40 @@ class MemberController extends Controller
      */
     private function handleLeadershipAssignment(Member $member, Request $request)
     {
-        // Check if admin is assigning leadership
         if (!auth()->user()->isAdmin()) {
             return;
         }
 
-        // Handle cell leadership
-        if ($request->filled('cell_leader_of')) {
-            $cell = Cell::find($request->cell_leader_of);
-            if ($cell) {
-                $cell->update(['cell_leader_id' => $member->id]);
-                $this->createUserForLeader($member, 'usher');
+        $this->assignLeadership('cell_leader_of', Cell::class, 'cell_leader_id', $member, $request);
+        $this->assignLeadership('assistant_cell_leader_of', Cell::class, 'assistant_leader_id', $member, $request);
+        $this->assignLeadership('fold_leader_of', Fold::class, 'fold_leader_id', $member, $request);
+        $this->assignLeadership('assistant_fold_leader_of', Fold::class, 'assistant_leader_id', $member, $request);
+    }
+
+    private function assignLeadership($requestKey, $modelClass, $leaderColumn, Member $member, Request $request)
+    {
+        $newLeaderOfId = $request->input($requestKey);
+
+        // Find the model that this member is currently a leader of for this role
+        $currentlyLeads = $modelClass::where($leaderColumn, $member->id)->first();
+
+        // If the member is currently a leader of something in this role
+        if ($currentlyLeads) {
+            // If the new assignment is different, or is 'none', nullify the old leadership role
+            if ($currentlyLeads->id != $newLeaderOfId) {
+                $currentlyLeads->update([$leaderColumn => null]);
             }
         }
 
-        if ($request->filled('assistant_cell_leader_of')) {
-            $cell = Cell::find($request->assistant_cell_leader_of);
-            if ($cell) {
-                $cell->update(['assistant_leader_id' => $member->id]);
-                $this->createUserForLeader($member, 'usher');
-            }
-        }
-
-        // Handle fold leadership
-        if ($request->filled('fold_leader_of')) {
-            $fold = Fold::find($request->fold_leader_of);
-            if ($fold) {
-                $fold->update(['fold_leader_id' => $member->id]);
-                $this->createUserForLeader($member, 'usher');
-            }
-        }
-
-        if ($request->filled('assistant_fold_leader_of')) {
-            $fold = Fold::find($request->assistant_fold_leader_of);
-            if ($fold) {
-                $fold->update(['assistant_leader_id' => $member->id]);
+        // If a new assignment is made (and it's not 'none')
+        if ($newLeaderOfId) {
+            $modelToLead = $modelClass::find($newLeaderOfId);
+            if ($modelToLead) {
+                // Nullify whoever is the current leader of the new assignment
+                if ($modelToLead->$leaderColumn) {
+                    // No need to remove user, just the role
+                }
+                $modelToLead->update([$leaderColumn => $member->id]);
                 $this->createUserForLeader($member, 'usher');
             }
         }

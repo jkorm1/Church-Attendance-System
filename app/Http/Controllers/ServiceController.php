@@ -20,16 +20,23 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        // Get manually created services
-        $manualServices = Service::orderBy('service_date', 'desc')->get();
+        // Get manually created services and key them by a unique identifier
+        $manualServices = Service::orderBy('service_date', 'desc')->get()->keyBy(function ($service) {
+            return $service->name . '_' . $service->service_date;
+        });
+
+        // Get auto-generated services
+        $autoServices = collect($this->serviceGenerator->getAllServices())->keyBy(function ($service) {
+            return $service['name'] . '_' . $service['service_date'];
+        });
         
-        // Get auto-generated services (today + upcoming)
-        $autoServices = collect($this->serviceGenerator->getAllServices());
-        
-        // Combine and sort by date (most recent first)
-        $allServices = $manualServices->concat($autoServices)->sortByDesc('service_date');
-        
-        return view('attendance.services', compact('allServices'));
+        // Merge the two collections, with manual services overwriting auto-generated ones
+        $allServices = $autoServices->merge($manualServices);
+
+        // Sort the final collection by date
+        $allServices = $allServices->sortBy('service_date');
+
+        return view('services.index', compact('allServices'));
     }
 
     /**

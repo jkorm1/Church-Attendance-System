@@ -40,4 +40,34 @@ class Member extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function cell()
+    {
+        return $this->belongsTo(Cell::class);
+    }
+
+    public function fold()
+    {
+        return $this->belongsTo(Fold::class);
+    }
+
+    public function ledCell()
+    {
+        return $this->hasOne(Cell::class, 'cell_leader_id');
+    }
+
+    public function assistantLedCell()
+    {
+        return $this->hasOne(Cell::class, 'assistant_leader_id');
+    }
+
+    public function ledFold()
+    {
+        return $this->hasOne(Fold::class, 'fold_leader_id');
+    }
+
+    public function assistantLedFold()
+    {
+        return $this->hasOne(Fold::class, 'assistant_leader_id');
+    }
 }

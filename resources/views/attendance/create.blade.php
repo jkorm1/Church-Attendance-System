@@ -5,7 +5,7 @@
     <div class="max-w-2xl mx-auto">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Add Attendance Record</h1>
-            <a href="{{ route('attendance.services') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            <a href="{{ route('services.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                 Back to Services
             </a>
         </div>
@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <a href="{{ route('attendance.services') }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
+                    <a href="{{ route('services.index') }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
                         Cancel
                     </a>
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
