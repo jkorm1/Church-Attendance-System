@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: cw_attendance_app
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        ports:
+            - "8000:8000"
+        depends_on:
+            - mysql
+        environment:
+            - DB_HOST=mysql
+            - DB_DATABASE=church_attendance
+            - DB_USERNAME=root
+            - DB_PASSWORD=secret
+        command: bash -c "composer install && php artisan key:generate && php artisan serve --host=0.0.0.0 --port=8000"
+
+    mysql:
+        image: mysql:8.0
+        container_name: cw_attendance_mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: church_attendance
+        ports:
+            - "3306:3306"
+        volumes:
+            - dbdata:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: cw_attendance_phpmyadmin
+        restart: unless-stopped
+        environment:
+            PMA_HOST: mysql
+            PMA_USER: root
+            PMA_PASSWORD: secret
+        ports:
+            - "8080:80"
+        depends_on:
+            - mysql
+
+volumes:
+    dbdata:

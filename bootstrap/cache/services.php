@@ -28,13 +28,15 @@
     24 => 'Brunocfalcao\\BladeFeatherIcons\\BladeFeatherIconsServiceProvider',
     25 => 'Codeat3\\BladeAkarIcons\\BladeAkarIconsServiceProvider',
     26 => 'Codeat3\\BladeEosIcons\\BladeEosIconsServiceProvider',
-    27 => 'Laravel\\Pail\\PailServiceProvider',
-    28 => 'Laravel\\Sail\\SailServiceProvider',
-    29 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    30 => 'Carbon\\Laravel\\ServiceProvider',
-    31 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    32 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    33 => 'App\\Providers\\AppServiceProvider',
+    27 => 'Laravel\\Breeze\\BreezeServiceProvider',
+    28 => 'Laravel\\Pail\\PailServiceProvider',
+    29 => 'Laravel\\Sail\\SailServiceProvider',
+    30 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    31 => 'Carbon\\Laravel\\ServiceProvider',
+    32 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    33 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    34 => 'Spatie\\Permission\\PermissionServiceProvider',
+    35 => 'App\\Providers\\AppServiceProvider',
   ),
   'eager' => 
   array (
@@ -56,7 +58,8 @@
     15 => 'Carbon\\Laravel\\ServiceProvider',
     16 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     17 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    18 => 'App\\Providers\\AppServiceProvider',
+    18 => 'Spatie\\Permission\\PermissionServiceProvider',
+    19 => 'App\\Providers\\AppServiceProvider',
   ),
   'deferred' => 
   array (
@@ -209,6 +212,7 @@
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'Illuminate\\Contracts\\Validation\\UncompromisedVerifier' => 'Illuminate\\Validation\\ValidationServiceProvider',
+    'Laravel\\Breeze\\Console\\InstallCommand' => 'Laravel\\Breeze\\BreezeServiceProvider',
     'Laravel\\Sail\\Console\\InstallCommand' => 'Laravel\\Sail\\SailServiceProvider',
     'Laravel\\Sail\\Console\\PublishCommand' => 'Laravel\\Sail\\SailServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
@@ -252,6 +256,9 @@
     array (
     ),
     'Illuminate\\Validation\\ValidationServiceProvider' => 
+    array (
+    ),
+    'Laravel\\Breeze\\BreezeServiceProvider' => 
     array (
     ),
     'Laravel\\Sail\\SailServiceProvider' => 
