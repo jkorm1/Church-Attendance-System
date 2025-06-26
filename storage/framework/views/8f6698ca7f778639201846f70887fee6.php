@@ -1,28 +1,46 @@
 <?php $__env->startSection('content'); ?>
-<div class="container mx-auto py-6">
+<div class="container mx-auto py-6 font-montserrat">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Members</h1>
-        <a href="<?php echo e(route('members.create')); ?>" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Add Member</a>
+        <h1 class="text-2xl font-bold text-[#3a1d09]">Members</h1>
+        <?php if (isset($component)) { $__componentOriginald411d1792bd6cc877d687758b753742c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald411d1792bd6cc877d687758b753742c = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.primary-button','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('primary-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?><?php echo e(__('Add Member')); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald411d1792bd6cc877d687758b753742c)): ?>
+<?php $attributes = $__attributesOriginald411d1792bd6cc877d687758b753742c; ?>
+<?php unset($__attributesOriginald411d1792bd6cc877d687758b753742c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald411d1792bd6cc877d687758b753742c)): ?>
+<?php $component = $__componentOriginald411d1792bd6cc877d687758b753742c; ?>
+<?php unset($__componentOriginald411d1792bd6cc877d687758b753742c); ?>
+<?php endif; ?>
     </div>
     <?php if(session('success')): ?>
         <div class="mb-4 text-green-600"><?php echo e(session('success')); ?></div>
     <?php endif; ?>
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border">
-            <thead>
+        <table class="min-w-full bg-white border border-[#3a1d09] rounded-lg shadow">
+            <thead class="bg-[#f58502]">
                 <tr>
-                    <th class="px-4 py-2 border">Name</th>
-                    <th class="px-4 py-2 border">Gender</th>
-                    <th class="px-4 py-2 border">Phone</th>
-                    <th class="px-4 py-2 border">Status</th>
-                    <th class="px-4 py-2 border">Cell</th>
-                    <th class="px-4 py-2 border">Fold</th>
-                    <th class="px-4 py-2 border">First Visit</th>
-                    <th class="px-4 py-2 border">Leader Role</th>
-                    <th class="px-4 py-2 border">Actions</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Name</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Gender</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Phone</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Status</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Cell</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Fold</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">First Visit</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Leader Role</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-orange-100">
                 <?php $__currentLoopData = $members; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $member): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr>
                     <td class="px-4 py-2 border"><?php echo e($member->name); ?></td>

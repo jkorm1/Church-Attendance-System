@@ -78,9 +78,7 @@
                     <a href="{{ route('attendance.index', $attendance->service_id) }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
                         Cancel
                     </a>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        Update Attendance Record
-                    </button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded border border-blue-700 shadow-sm hover:bg-blue-600">Update Attendance Record</button>
                 </div>
             </form>
         </div>

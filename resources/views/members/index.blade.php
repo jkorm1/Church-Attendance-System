@@ -1,30 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-6">
+<div class="container mx-auto py-6 font-montserrat">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Members</h1>
-        <a href="{{ route('members.create') }}" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Add Member</a>
+        <h1 class="text-2xl font-bold text-[#3a1d09]">Members</h1>
+        <x-primary-button>{{ __('Add Member') }}</x-primary-button>
     </div>
     @if(session('success'))
         <div class="mb-4 text-green-600">{{ session('success') }}</div>
     @endif
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border">
-            <thead>
+        <table class="min-w-full bg-white border border-[#3a1d09] rounded-lg shadow">
+            <thead class="bg-[#f58502]">
                 <tr>
-                    <th class="px-4 py-2 border">Name</th>
-                    <th class="px-4 py-2 border">Gender</th>
-                    <th class="px-4 py-2 border">Phone</th>
-                    <th class="px-4 py-2 border">Status</th>
-                    <th class="px-4 py-2 border">Cell</th>
-                    <th class="px-4 py-2 border">Fold</th>
-                    <th class="px-4 py-2 border">First Visit</th>
-                    <th class="px-4 py-2 border">Leader Role</th>
-                    <th class="px-4 py-2 border">Actions</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Name</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Gender</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Phone</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Status</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Cell</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Fold</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">First Visit</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Leader Role</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-orange-100">
                 @foreach($members as $member)
                 <tr>
                     <td class="px-4 py-2 border">{{ $member->name }}</td>

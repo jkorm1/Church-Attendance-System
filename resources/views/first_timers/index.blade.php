@@ -4,7 +4,7 @@
 <div class="container mx-auto py-6 max-w-7xl">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">First Timers &amp; Follow-Up Department</h1>
-        <a href="{{ route('first_timers.create') }}" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Register First Timer</a>
+        <a href="{{ route('first_timers.create') }}" class="bg-orange-500 text-white px-4 py-2 rounded border border-orange-700 shadow-sm hover:bg-orange-600">Register First Timer</a>
     </div>
 
     {{-- Filter Form --}}
@@ -34,7 +34,7 @@
             <input type="date" name="date" id="date" value="{{ request('date') }}" class="mt-1 block w-48 border-gray-300 rounded shadow-sm">
         </div>
         <div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Filter</button>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded border border-blue-700 shadow-sm hover:bg-blue-700">Filter</button>
             <a href="{{ route('first_timers.index') }}" class="ml-2 text-sm text-gray-600 underline">Reset</a>
         </div>
     </form>
@@ -65,24 +65,24 @@
             {{ session('success') }}
         </div>
     @endif
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border">
-            <thead>
+    <div class="overflow-x-auto font-montserrat">
+        <table class="min-w-full bg-white border border-[#3a1d09] rounded-lg shadow">
+            <thead class="bg-[#f58502]">
                 <tr>
-                    <th class="px-4 py-2 border">Name</th>
-                    <th class="px-4 py-2 border">Date of Birth</th>
-                    <th class="px-4 py-2 border">Contact</th>
-                    <th class="px-4 py-2 border">Residence</th>
-                    <th class="px-4 py-2 border">Purpose</th>
-                    <th class="px-4 py-2 border">Service</th>
-                    <th class="px-4 py-2 border">Invited By</th>
-                    <th class="px-4 py-2 border">Cell</th>
-                    <th class="px-4 py-2 border">Fold</th>
-                    <th class="px-4 py-2 border">First Visit</th>
-                    <th class="px-4 py-2 border">Actions</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Name</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Date of Birth</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Contact</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Residence</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Purpose</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Service</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Invited By</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Cell</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Fold</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">First Visit</th>
+                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-orange-100">
                 @foreach($firstTimers as $ft)
                 <tr>
                     <td class="px-4 py-2 border">{{ $ft->name }}</td>
@@ -102,12 +102,12 @@
                     <td class="px-4 py-2 border">
                         <form action="{{ route('first_timers.promote', $ft->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mb-2">Promote to Member</button>
+                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded border border-green-700 shadow-sm hover:bg-green-600 mb-2">Promote to Member</button>
                         </form>
                         <form action="{{ route('first_timers.destroy', $ft->id) }}" method="POST" onsubmit="return confirm('Delete this first timer?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded border border-red-700 shadow-sm hover:bg-red-600">Delete</button>
                         </form>
                     </td>
                 </tr>

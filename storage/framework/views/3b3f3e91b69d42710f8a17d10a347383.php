@@ -14,72 +14,70 @@
         </div>
     <?php endif; ?>
 
-    <form action="<?php echo e(route('first_timers.store')); ?>" method="POST" class="space-y-6">
+    <form action="<?php echo e(route('first_timers.store')); ?>" method="POST" class="space-y-6 font-montserrat bg-white shadow-md rounded-lg p-6 border border-[#3a1d09]">
         <?php echo csrf_field(); ?>
         
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-4">Personal Information</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
-                    <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="<?php echo e(old('name')); ?>" required>
-                    <?php $__errorArgs = ['name'];
+        <h3 class="text-lg font-semibold mb-4 text-[#3a1d09]">Personal Information</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="name" class="block text-sm font-bold text-[#3a1d09] mb-2">Full Name *</label>
+                <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="<?php echo e(old('name')); ?>" required>
+                <?php $__errorArgs = ['name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
-                    <?php unset($message);
+                    <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                </div>
+            </div>
 
-                <div>
-                    <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                    <input type="date" name="date_of_birth" id="date_of_birth" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="<?php echo e(old('date_of_birth')); ?>">
-                    <?php $__errorArgs = ['date_of_birth'];
+            <div>
+                <label for="date_of_birth" class="block text-sm font-bold text-[#3a1d09] mb-2">Date of Birth</label>
+                <input type="date" name="date_of_birth" id="date_of_birth" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="<?php echo e(old('date_of_birth')); ?>">
+                <?php $__errorArgs = ['date_of_birth'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
-                    <?php unset($message);
+                    <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                </div>
+            </div>
 
-                <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Contact Number *</label>
-                    <input type="tel" name="phone" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="<?php echo e(old('phone')); ?>" required>
-                    <?php $__errorArgs = ['phone'];
+            <div>
+                <label for="phone" class="block text-sm font-bold text-[#3a1d09] mb-2">Contact Number *</label>
+                <input type="tel" name="phone" id="phone" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="<?php echo e(old('phone')); ?>" required>
+                <?php $__errorArgs = ['phone'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
-                    <?php unset($message);
+                    <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                </div>
+            </div>
 
-                <div>
-                    <label for="residence" class="block text-sm font-medium text-gray-700 mb-2">Residence/Address</label>
-                    <input type="text" name="residence" id="residence" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="<?php echo e(old('residence')); ?>" placeholder="Enter full address">
-                    <?php $__errorArgs = ['residence'];
+            <div>
+                <label for="residence" class="block text-sm font-bold text-[#3a1d09] mb-2">Residence/Address</label>
+                <input type="text" name="residence" id="residence" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="<?php echo e(old('residence')); ?>" placeholder="Enter full address">
+                <?php $__errorArgs = ['residence'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-                        <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
-                    <?php unset($message);
+                    <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                </div>
             </div>
         </div>
 
@@ -88,8 +86,8 @@ unset($__errorArgs, $__bag); ?>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="purpose" class="block text-sm font-medium text-gray-700 mb-2">Purpose of Visit *</label>
-                    <select name="purpose" id="purpose" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" required>
+                    <label for="purpose" class="block text-sm font-bold text-[#3a1d09] mb-2">Purpose of Visit *</label>
+                    <select name="purpose" id="purpose" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" required>
                         <option value="">Select Purpose</option>
                         <option value="visit" <?php if(old('purpose') == 'visit'): ?> selected <?php endif; ?>>Visit</option>
                         <option value="stay" <?php if(old('purpose') == 'stay'): ?> selected <?php endif; ?>>Stay (Join Church)</option>
@@ -107,8 +105,8 @@ unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <div>
-                    <label for="first_visit_date" class="block text-sm font-medium text-gray-700 mb-2">First Visit Date</label>
-                    <input type="date" name="first_visit_date" id="first_visit_date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="<?php echo e(old('first_visit_date', date('Y-m-d'))); ?>">
+                    <label for="first_visit_date" class="block text-sm font-bold text-[#3a1d09] mb-2">First Visit Date</label>
+                    <input type="date" name="first_visit_date" id="first_visit_date" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="<?php echo e(old('first_visit_date', date('Y-m-d'))); ?>">
                     <?php $__errorArgs = ['first_visit_date'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -122,8 +120,8 @@ unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <div>
-                    <label for="service_id" class="block text-sm font-medium text-gray-700 mb-2">Service Attended *</label>
-                    <select name="service_id" id="service_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" required>
+                    <label for="service_id" class="block text-sm font-bold text-[#3a1d09] mb-2">Service Attended *</label>
+                    <select name="service_id" id="service_id" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" required>
                         <option value="">Select Service</option>
                         <?php $__currentLoopData = $allServices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($service['id'] ?? $service->id); ?>" <?php if(old('service_id') == ($service['id'] ?? $service->id)): ?> selected <?php endif; ?>>
@@ -149,11 +147,11 @@ unset($__errorArgs, $__bag); ?>
             </div>
 
             <div class="mt-6">
-                <label for="inviter_search" class="block text-sm font-medium text-gray-700 mb-2">Invited By (Search Member)</label>
+                <label for="inviter_search" class="block text-sm font-bold text-[#3a1d09] mb-2">Invited By (Search Member)</label>
                 <div class="relative">
-                    <input type="text" id="inviter_search" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Start typing member name..." autocomplete="off">
+                    <input type="text" id="inviter_search" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" placeholder="Start typing member name..." autocomplete="off">
                     <input type="hidden" name="invited_by" id="invited_by" value="<?php echo e(old('invited_by')); ?>">
-                    <div id="search_results" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto hidden"></div>
+                    <div id="search_results" class="absolute z-10 w-full bg-white border border-[#3a1d09] rounded-md shadow-lg max-h-60 overflow-y-auto hidden"></div>
                 </div>
                 <div id="selected_inviter" class="mt-2 p-2 bg-green-50 border border-green-200 rounded-md hidden">
                     <span class="text-sm text-green-700">Selected: <span id="inviter_name"></span></span>
@@ -176,8 +174,8 @@ unset($__errorArgs, $__bag); ?>
             <h3 class="text-lg font-semibold mb-4">Additional Information</h3>
             
             <div>
-                <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
-                <textarea name="notes" id="notes" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Any additional notes about the first timer"><?php echo e(old('notes')); ?></textarea>
+                <label for="notes" class="block text-sm font-bold text-[#3a1d09] mb-2">Notes</label>
+                <textarea name="notes" id="notes" rows="3" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" placeholder="Any additional notes about the first timer"><?php echo e(old('notes')); ?></textarea>
                 <?php $__errorArgs = ['notes'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -191,9 +189,26 @@ unset($__errorArgs, $__bag); ?>
             </div>
         </div>
 
-        <div class="flex justify-between">
-            <a href="<?php echo e(route('first_timers.index')); ?>" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</a>
-            <button type="submit" class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500">Register First Timer</button>
+        <div class="flex justify-end">
+            <?php if (isset($component)) { $__componentOriginald411d1792bd6cc877d687758b753742c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald411d1792bd6cc877d687758b753742c = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.primary-button','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('primary-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?><?php echo e(__('Register First Timer')); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald411d1792bd6cc877d687758b753742c)): ?>
+<?php $attributes = $__attributesOriginald411d1792bd6cc877d687758b753742c; ?>
+<?php unset($__attributesOriginald411d1792bd6cc877d687758b753742c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald411d1792bd6cc877d687758b753742c)): ?>
+<?php $component = $__componentOriginald411d1792bd6cc877d687758b753742c; ?>
+<?php unset($__componentOriginald411d1792bd6cc877d687758b753742c); ?>
+<?php endif; ?>
         </div>
     </form>
 </div>

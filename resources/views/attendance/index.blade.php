@@ -27,25 +27,25 @@
     @endif
 
     <!-- Statistics Card -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <div class="bg-white p-4 rounded-lg shadow border">
-            <div class="text-sm text-gray-600">Total Members</div>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6 font-montserrat">
+        <div class="bg-white p-4 rounded-lg shadow border border-[#3a1d09]">
+            <div class="text-sm text-[#3a1d09]">Total Members</div>
             <div class="text-2xl font-bold text-gray-800">{{ $members->count() }}</div>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow border">
-            <div class="text-sm text-gray-600">First Timers</div>
+        <div class="bg-white p-4 rounded-lg shadow border border-[#3a1d09]">
+            <div class="text-sm text-[#3a1d09]">First Timers</div>
             <div class="text-2xl font-bold text-purple-600">{{ $firstTimers->count() }}</div>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow border">
-            <div class="text-sm text-gray-600">Present</div>
+        <div class="bg-white p-4 rounded-lg shadow border border-[#3a1d09]">
+            <div class="text-sm text-[#3a1d09]">Present</div>
             <div class="text-2xl font-bold text-green-600">{{ $memberAttendance->filter(fn($present) => $present)->count() + $firstTimerAttendance->filter(fn($present) => $present)->count() }}</div>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow border">
-            <div class="text-sm text-gray-600">Absent</div>
+        <div class="bg-white p-4 rounded-lg shadow border border-[#3a1d09]">
+            <div class="text-sm text-[#3a1d09]">Absent</div>
             <div class="text-2xl font-bold text-red-600">{{ $memberAttendance->filter(fn($present) => !$present)->count() }}</div>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow border">
-            <div class="text-sm text-gray-600">Unmarked</div>
+        <div class="bg-white p-4 rounded-lg shadow border border-[#3a1d09]">
+            <div class="text-sm text-[#3a1d09]">Unmarked</div>
             <div class="text-2xl font-bold text-gray-500">{{ $members->count() - $memberAttendance->count() }}</div>
         </div>
     </div>
@@ -54,29 +54,27 @@
     <div class="flex flex-wrap gap-2 mb-6">
         <form action="{{ route('attendance.finalize', $service->id) }}" method="POST" class="inline">
             @csrf
-            <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
-                Finalize Attendance
-            </button>
+            <button type="submit" class="bg-orange-500 text-gray-900 px-4 py-2 rounded border border-orange-700 shadow-sm hover:bg-orange-600">Finalize Attendance</button>
         </form>
     </div>
 
     <!-- Attendance Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-white rounded-lg shadow overflow-hidden font-montserrat">
         <div class="overflow-x-auto">
-            <table class="min-w-full">
-                <thead class="bg-gray-50">
+            <table class="min-w-full rounded-lg overflow-hidden">
+                <thead class="bg-[#f58502]">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attendance</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#3a1d09] uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#3a1d09] uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#3a1d09] uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#3a1d09] uppercase tracking-wider">Attendance</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-[#3a1d09] uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y divide-orange-100">
                     <!-- Members Section -->
                     @foreach($members as $member)
-                    <tr class="hover:bg-gray-50">
+                    <tr class="hover:bg-orange-50">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">{{ $member->name }}</div>
                             @if($member->phone)
@@ -111,12 +109,12 @@
                                     <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="1">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded hover:bg-green-600">Present</button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-green-500 border border-green-700 rounded shadow-sm hover:bg-green-600">Present</button>
                                     </form>
                                     <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="0">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-red-500 rounded hover:bg-red-600">Absent</button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-red-500 border border-red-700 rounded shadow-sm hover:bg-red-600">Absent</button>
                                     </form>
                                 </div>
                             @else
@@ -124,16 +122,12 @@
                                     <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="1">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white rounded {{ isset($memberAttendance[$member->id]) && $memberAttendance[$member->id] ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600' }}" {{ isset($memberAttendance[$member->id]) && $memberAttendance[$member->id] ? 'disabled' : '' }}>
-                                            Present
-                                        </button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Present</button>
                                     </form>
                                     <form action="{{ route('attendance.mark', ['service' => $service->id, 'member' => $member->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="0">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white rounded {{ isset($memberAttendance[$member->id]) && !$memberAttendance[$member->id] ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600' }}" {{ isset($memberAttendance[$member->id]) && !$memberAttendance[$member->id] ? 'disabled' : '' }}>
-                                            Absent
-                                        </button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Absent</button>
                                     </form>
                                 </div>
                             @endif
@@ -143,7 +137,7 @@
 
                     <!-- First Timers Section -->
                     @foreach($firstTimers as $firstTimer)
-                    <tr class="hover:bg-gray-50 bg-purple-50">
+                    <tr class="hover:bg-orange-50 bg-purple-50">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm font-medium text-gray-900">{{ $firstTimer->name }}</div>
                             @if($firstTimer->phone)
@@ -184,12 +178,12 @@
                                     <form action="{{ route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="1">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded hover:bg-green-600">Present</button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-green-500 border border-green-700 rounded shadow-sm hover:bg-green-600">Present</button>
                                     </form>
                                     <form action="{{ route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="0">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-red-500 rounded hover:bg-red-600">Absent</button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-red-500 border border-red-700 rounded shadow-sm hover:bg-red-600">Absent</button>
                                     </form>
                                 </div>
                             @else
@@ -197,16 +191,12 @@
                                     <form action="{{ route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="1">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white rounded {{ isset($firstTimerAttendance[$firstTimer->id]) && $firstTimerAttendance[$firstTimer->id] ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-600' }}" {{ isset($firstTimerAttendance[$firstTimer->id]) && $firstTimerAttendance[$firstTimer->id] ? 'disabled' : '' }}>
-                                            Present
-                                        </button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Present</button>
                                     </form>
                                     <form action="{{ route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id]) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="present" value="0">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white rounded {{ isset($firstTimerAttendance[$firstTimer->id]) && !$firstTimerAttendance[$firstTimer->id] ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600' }}" {{ isset($firstTimerAttendance[$firstTimer->id]) && !$firstTimerAttendance[$firstTimer->id] ? 'disabled' : '' }}>
-                                            Absent
-                                        </button>
+                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Absent</button>
                                     </form>
                                 </div>
                             @endif

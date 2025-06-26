@@ -13,44 +13,42 @@
         </div>
     @endif
 
-    <form action="{{ route('first_timers.store') }}" method="POST" class="space-y-6">
+    <form action="{{ route('first_timers.store') }}" method="POST" class="space-y-6 font-montserrat bg-white shadow-md rounded-lg p-6 border border-[#3a1d09]">
         @csrf
         
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-4">Personal Information</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
-                    <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{ old('name') }}" required>
-                    @error('name')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+        <h3 class="text-lg font-semibold mb-4 text-[#3a1d09]">Personal Information</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="name" class="block text-sm font-bold text-[#3a1d09] mb-2">Full Name *</label>
+                <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="{{ old('name') }}" required>
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <div>
-                    <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                    <input type="date" name="date_of_birth" id="date_of_birth" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{ old('date_of_birth') }}">
-                    @error('date_of_birth')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+            <div>
+                <label for="date_of_birth" class="block text-sm font-bold text-[#3a1d09] mb-2">Date of Birth</label>
+                <input type="date" name="date_of_birth" id="date_of_birth" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="{{ old('date_of_birth') }}">
+                @error('date_of_birth')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Contact Number *</label>
-                    <input type="tel" name="phone" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{ old('phone') }}" required>
-                    @error('phone')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+            <div>
+                <label for="phone" class="block text-sm font-bold text-[#3a1d09] mb-2">Contact Number *</label>
+                <input type="tel" name="phone" id="phone" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="{{ old('phone') }}" required>
+                @error('phone')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <div>
-                    <label for="residence" class="block text-sm font-medium text-gray-700 mb-2">Residence/Address</label>
-                    <input type="text" name="residence" id="residence" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{ old('residence') }}" placeholder="Enter full address">
-                    @error('residence')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+            <div>
+                <label for="residence" class="block text-sm font-bold text-[#3a1d09] mb-2">Residence/Address</label>
+                <input type="text" name="residence" id="residence" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="{{ old('residence') }}" placeholder="Enter full address">
+                @error('residence')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
         </div>
 
@@ -59,8 +57,8 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="purpose" class="block text-sm font-medium text-gray-700 mb-2">Purpose of Visit *</label>
-                    <select name="purpose" id="purpose" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" required>
+                    <label for="purpose" class="block text-sm font-bold text-[#3a1d09] mb-2">Purpose of Visit *</label>
+                    <select name="purpose" id="purpose" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" required>
                         <option value="">Select Purpose</option>
                         <option value="visit" @if(old('purpose') == 'visit') selected @endif>Visit</option>
                         <option value="stay" @if(old('purpose') == 'stay') selected @endif>Stay (Join Church)</option>
@@ -71,16 +69,16 @@
                 </div>
 
                 <div>
-                    <label for="first_visit_date" class="block text-sm font-medium text-gray-700 mb-2">First Visit Date</label>
-                    <input type="date" name="first_visit_date" id="first_visit_date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{ old('first_visit_date', date('Y-m-d')) }}">
+                    <label for="first_visit_date" class="block text-sm font-bold text-[#3a1d09] mb-2">First Visit Date</label>
+                    <input type="date" name="first_visit_date" id="first_visit_date" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="{{ old('first_visit_date', date('Y-m-d')) }}">
                     @error('first_visit_date')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label for="service_id" class="block text-sm font-medium text-gray-700 mb-2">Service Attended *</label>
-                    <select name="service_id" id="service_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" required>
+                    <label for="service_id" class="block text-sm font-bold text-[#3a1d09] mb-2">Service Attended *</label>
+                    <select name="service_id" id="service_id" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" required>
                         <option value="">Select Service</option>
                         @foreach($allServices as $service)
                             <option value="{{ $service['id'] ?? $service->id }}" @if(old('service_id') == ($service['id'] ?? $service->id)) selected @endif>
@@ -98,11 +96,11 @@
             </div>
 
             <div class="mt-6">
-                <label for="inviter_search" class="block text-sm font-medium text-gray-700 mb-2">Invited By (Search Member)</label>
+                <label for="inviter_search" class="block text-sm font-bold text-[#3a1d09] mb-2">Invited By (Search Member)</label>
                 <div class="relative">
-                    <input type="text" id="inviter_search" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Start typing member name..." autocomplete="off">
+                    <input type="text" id="inviter_search" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" placeholder="Start typing member name..." autocomplete="off">
                     <input type="hidden" name="invited_by" id="invited_by" value="{{ old('invited_by') }}">
-                    <div id="search_results" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto hidden"></div>
+                    <div id="search_results" class="absolute z-10 w-full bg-white border border-[#3a1d09] rounded-md shadow-lg max-h-60 overflow-y-auto hidden"></div>
                 </div>
                 <div id="selected_inviter" class="mt-2 p-2 bg-green-50 border border-green-200 rounded-md hidden">
                     <span class="text-sm text-green-700">Selected: <span id="inviter_name"></span></span>
@@ -118,17 +116,16 @@
             <h3 class="text-lg font-semibold mb-4">Additional Information</h3>
             
             <div>
-                <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
-                <textarea name="notes" id="notes" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Any additional notes about the first timer">{{ old('notes') }}</textarea>
+                <label for="notes" class="block text-sm font-bold text-[#3a1d09] mb-2">Notes</label>
+                <textarea name="notes" id="notes" rows="3" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" placeholder="Any additional notes about the first timer">{{ old('notes') }}</textarea>
                 @error('notes')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
         </div>
 
-        <div class="flex justify-between">
-            <a href="{{ route('first_timers.index') }}" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</a>
-            <button type="submit" class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500">Register First Timer</button>
+        <div class="flex justify-end">
+            <x-primary-button>{{ __('Register First Timer') }}</x-primary-button>
         </div>
     </form>
 </div>

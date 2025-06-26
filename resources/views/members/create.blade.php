@@ -10,13 +10,16 @@
         </div>
     @endif
 
-    <form action="{{ route('members.store') }}" method="POST" class="space-y-4">
+    <form action="{{ route('members.store') }}" method="POST" class="space-y-6 font-montserrat bg-white shadow-md rounded-lg p-6 border border-[#3a1d09]">
         @csrf
-        
+        <h3 class="text-lg font-semibold mb-4 text-[#3a1d09]">Member Information</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label class="block font-medium">Name</label>
-                <input type="text" name="name" class="w-full border rounded px-3 py-2" value="{{ old('name') }}" required>
+                <label for="name" class="block text-sm font-bold text-[#3a1d09] mb-2">Full Name *</label>
+                <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="{{ old('name') }}" required>
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
             <div>
                 <label class="block font-medium">Phone</label>
@@ -94,9 +97,8 @@
         </div>
         @endif
 
-        <div class="flex justify-between">
-            <a href="{{ route('members.index') }}" class="text-gray-600">Cancel</a>
-            <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Add Member</button>
+        <div class="flex justify-end">
+            <x-primary-button>{{ __('Add Member') }}</x-primary-button>
         </div>
     </form>
 </div>
