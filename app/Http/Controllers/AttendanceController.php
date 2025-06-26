@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Member;
 use App\Models\Service;
+use App\Models\FirstTimer;
 use App\Services\ServiceGeneratorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,14 +41,34 @@ class AttendanceController extends Controller
                 $service = Service::findOrFail($service_id);
             }
 
-            // Use the centralized method to get manageable members
-            $members = $user->getManageableMembers()->orderBy('name')->get();
+            // Get manageable members (exclude those who were converted from first timers on this service date)
+            $serviceDate = $service->service_date ?? date('Y-m-d');
+            $members = $user->getManageableMembers()
+                           ->whereNotIn('id', function($query) use ($serviceDate) {
+                               $query->select('id')
+                                     ->from('members')
+                                     ->whereDate('created_at', $serviceDate)
+                                     ->whereNotNull('invited_by');
+                           })
+                           ->orderBy('name')
+                           ->get();
+            
+            // Get all first timers for this service date (both visit and stay)
+            $firstTimers = FirstTimer::whereDate('first_visit_date', $serviceDate)
+                                   ->orderBy('name')
+                                   ->get();
 
-            $attendance = Attendance::where('service_id', $service_id)
-                ->whereIn('member_id', $members->pluck('id')) // Filter attendance for manageable members
+            // Get attendance for members
+            $memberAttendance = Attendance::where('service_id', $service_id)
+                ->whereIn('member_id', $members->pluck('id'))
                 ->pluck('present', 'member_id');
 
-            return view('attendance.index', compact('service', 'members', 'attendance'));
+            // Get attendance for first timers
+            $firstTimerAttendance = Attendance::where('service_id', $service_id)
+                ->whereNotNull('first_timer_id')
+                ->pluck('present', 'first_timer_id');
+
+            return view('attendance.index', compact('service', 'members', 'memberAttendance', 'firstTimers', 'firstTimerAttendance'));
         } catch (\Exception $e) {
             return back()->with('error', 'Error loading attendance: ' . $e->getMessage());
         }
@@ -327,6 +348,27 @@ class AttendanceController extends Controller
                 ->header('Content-Disposition', "attachment; filename={$filename}");
         } catch (\Exception $e) {
             return back()->with('error', 'Error exporting attendance: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Mark a first timer's attendance status for a service.
+     */
+    public function markFirstTimer(Request $request, $service_id, $first_timer_id)
+    {
+        $request->validate(['present' => 'required|boolean']);
+
+        $firstTimer = FirstTimer::findOrFail($first_timer_id);
+
+        try {
+            Attendance::updateOrCreate(
+                ['service_id' => $service_id, 'first_timer_id' => $first_timer_id],
+                ['present' => $request->present]
+            );
+            $status = $request->present ? 'present' : 'absent';
+            return back()->with('success', "Marked first timer {$status}!");
+        } catch (\Exception $e) {
+            return back()->with('error', "Error marking first timer {$status}: " . $e->getMessage());
         }
     }
 }

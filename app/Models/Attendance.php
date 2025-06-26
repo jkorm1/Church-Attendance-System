@@ -11,6 +11,7 @@ class Attendance extends Model
 
     protected $fillable = [
         'member_id',
+        'first_timer_id',
         'service_id',
         'fold_id',
         'present',
@@ -64,6 +65,14 @@ class Attendance extends Model
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    /**
+     * Get the first timer this attendance record belongs to
+     */
+    public function firstTimer()
+    {
+        return $this->belongsTo(FirstTimer::class);
     }
 
     /**

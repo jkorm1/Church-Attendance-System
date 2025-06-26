@@ -34,7 +34,6 @@
                 <label class="block font-medium">Status</label>
                 <select name="status" class="w-full border rounded px-3 py-2" required>
                     <option value="member" @if(old('status') == 'member') selected @endif>Member</option>
-                    <option value="first_timer" @if(old('status') == 'first_timer') selected @endif>First Timer</option>
                 </select>
             </div>
             <div>
@@ -109,12 +108,25 @@
     document.addEventListener('DOMContentLoaded', function () {
         const cellSelect = document.getElementById('cell_id');
         const foldSelect = document.getElementById('fold_id');
-
         // Leadership dropdowns
         const cellLeaderSelect = document.getElementById('cell_leader_of');
         const assistantCellLeaderSelect = document.getElementById('assistant_cell_leader_of');
-        const foldLeaderSelect = document.getElementById('fold_leader_of');
-        const assistantFoldLeaderSelect = document.getElementById('assistant_fold_leader_of');
+        const foldDiv = foldSelect.closest('.mb-4');
+
+        function checkLeaderAssignment() {
+            if ((cellLeaderSelect && cellLeaderSelect.value) || (assistantCellLeaderSelect && assistantCellLeaderSelect.value)) {
+                foldSelect.value = '';
+                foldSelect.disabled = true;
+                if (foldDiv) foldDiv.style.display = 'none';
+            } else {
+                foldSelect.disabled = false;
+                if (foldDiv) foldDiv.style.display = '';
+            }
+        }
+
+        if (cellLeaderSelect) cellLeaderSelect.addEventListener('change', checkLeaderAssignment);
+        if (assistantCellLeaderSelect) assistantCellLeaderSelect.addEventListener('change', checkLeaderAssignment);
+        checkLeaderAssignment();
 
         cellSelect.addEventListener('change', function () {
             const cellId = this.value;

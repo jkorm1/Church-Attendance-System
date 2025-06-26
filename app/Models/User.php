@@ -151,7 +151,7 @@ class User extends Authenticatable
     public function getManageableMembers()
     {
         if ($this->isAdmin() || $this->isApostle()) {
-            return Member::all();
+            return Member::query();
         }
 
         if ($this->isCellLeader()) {

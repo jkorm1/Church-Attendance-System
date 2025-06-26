@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container mx-auto py-6 max-w-4xl">
     <h1 class="text-2xl font-bold mb-4">Add Member</h1>
@@ -35,7 +33,6 @@
                 <label class="block font-medium">Status</label>
                 <select name="status" class="w-full border rounded px-3 py-2" required>
                     <option value="member" <?php if(old('status') == 'member'): ?> selected <?php endif; ?>>Member</option>
-                    <option value="first_timer" <?php if(old('status') == 'first_timer'): ?> selected <?php endif; ?>>First Timer</option>
                 </select>
             </div>
             <div>
@@ -70,38 +67,26 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block font-medium">Cell Leader Of</label>
-                    <select name="cell_leader_of" class="w-full border rounded px-3 py-2">
+                    <select name="cell_leader_of" id="cell_leader_of" class="w-full border rounded px-3 py-2">
                         <option value="">None</option>
-                        <?php $__currentLoopData = $cells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($cell->id); ?>" <?php if(old('cell_leader_of') == $cell->id): ?> selected <?php endif; ?>><?php echo e($cell->name); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <div>
                     <label class="block font-medium">Assistant Cell Leader Of</label>
-                    <select name="assistant_cell_leader_of" class="w-full border rounded px-3 py-2">
+                    <select name="assistant_cell_leader_of" id="assistant_cell_leader_of" class="w-full border rounded px-3 py-2">
                         <option value="">None</option>
-                        <?php $__currentLoopData = $cells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($cell->id); ?>" <?php if(old('assistant_cell_leader_of') == $cell->id): ?> selected <?php endif; ?>><?php echo e($cell->name); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <div>
                     <label class="block font-medium">Fold Leader Of</label>
-                    <select name="fold_leader_of" class="w-full border rounded px-3 py-2">
+                    <select name="fold_leader_of" id="fold_leader_of" class="w-full border rounded px-3 py-2">
                         <option value="">None</option>
-                        <?php $__currentLoopData = $folds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fold): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($fold->id); ?>" <?php if(old('fold_leader_of') == $fold->id): ?> selected <?php endif; ?>><?php echo e($fold->name); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <div>
                     <label class="block font-medium">Assistant Fold Leader Of</label>
-                    <select name="assistant_fold_leader_of" class="w-full border rounded px-3 py-2">
+                    <select name="assistant_fold_leader_of" id="assistant_fold_leader_of" class="w-full border rounded px-3 py-2">
                         <option value="">None</option>
-                        <?php $__currentLoopData = $folds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fold): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($fold->id); ?>" <?php if(old('assistant_fold_leader_of') == $fold->id): ?> selected <?php endif; ?>><?php echo e($fold->name); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
             </div>
@@ -122,11 +107,41 @@
     document.addEventListener('DOMContentLoaded', function () {
         const cellSelect = document.getElementById('cell_id');
         const foldSelect = document.getElementById('fold_id');
+        // Leadership dropdowns
+        const cellLeaderSelect = document.getElementById('cell_leader_of');
+        const assistantCellLeaderSelect = document.getElementById('assistant_cell_leader_of');
+        const foldDiv = foldSelect.closest('.mb-4');
+
+        function checkLeaderAssignment() {
+            if ((cellLeaderSelect && cellLeaderSelect.value) || (assistantCellLeaderSelect && assistantCellLeaderSelect.value)) {
+                foldSelect.value = '';
+                foldSelect.disabled = true;
+                if (foldDiv) foldDiv.style.display = 'none';
+            } else {
+                foldSelect.disabled = false;
+                if (foldDiv) foldDiv.style.display = '';
+            }
+        }
+
+        if (cellLeaderSelect) cellLeaderSelect.addEventListener('change', checkLeaderAssignment);
+        if (assistantCellLeaderSelect) assistantCellLeaderSelect.addEventListener('change', checkLeaderAssignment);
+        checkLeaderAssignment();
 
         cellSelect.addEventListener('change', function () {
             const cellId = this.value;
-            foldSelect.innerHTML = '<option value="">Loading...</option>';
+            const cellName = this.options[this.selectedIndex].text;
 
+            // Reset and populate cell leadership dropdowns
+            cellLeaderSelect.innerHTML = '<option value="">None</option>';
+            assistantCellLeaderSelect.innerHTML = '<option value="">None</option>';
+            if (cellId) {
+                const option = new Option(cellName, cellId);
+                cellLeaderSelect.add(option.cloneNode(true));
+                assistantCellLeaderSelect.add(option.cloneNode(true));
+            }
+
+            // Fetch and populate folds
+            foldSelect.innerHTML = '<option value="">Loading...</option>';
             if (!cellId) {
                 foldSelect.innerHTML = '<option value="">Select a cell first</option>';
                 return;
@@ -142,11 +157,28 @@
                         option.textContent = fold.name;
                         foldSelect.appendChild(option);
                     });
+                    // Trigger change to update fold leadership dropdowns
+                    foldSelect.dispatchEvent(new Event('change'));
                 })
                 .catch(error => {
                     console.error('Error loading folds:', error);
                     foldSelect.innerHTML = '<option value="">Could not load folds</option>';
                 });
+        });
+
+        foldSelect.addEventListener('change', function() {
+            const foldId = this.value;
+            const foldName = this.options[this.selectedIndex].text;
+
+            // Reset and populate fold leadership dropdowns
+            foldLeaderSelect.innerHTML = '<option value="">None</option>';
+            assistantFoldLeaderSelect.innerHTML = '<option value="">None</option>';
+
+            if (foldId) {
+                const option = new Option(foldName, foldId);
+                foldLeaderSelect.add(option.cloneNode(true));
+                assistantFoldLeaderSelect.add(option.cloneNode(true));
+            }
         });
     });
 </script>

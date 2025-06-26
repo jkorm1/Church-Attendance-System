@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                     <img src="{{ asset('images/logo.png') }}" alt="Charis Word Gospel Ministry Logo" class="block h-9 w-auto">
+                     <img src="{{ asset('images/logoo.png') }}" alt="Charis Word Gospel Ministry Logo" class="block h-9 w-auto">
                     </a>
                 </div>
 
@@ -18,6 +18,11 @@
                     <x-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
                         {{ __('Members') }}
                     </x-nav-link>
+                    @if(auth()->user()->isAdmin() || auth()->user()->hasRole('leader'))
+                        <x-nav-link :href="route('first_timers.index')" :active="request()->routeIs('first_timers.*')">
+                            {{ __('First Timers') }}
+                        </x-nav-link>
+                    @endif
                     @if(auth()->user()->isAdmin())
                         <x-nav-link :href="route('folds.index')" :active="request()->routeIs('folds.*')">
                             {{ __('Folds') }}
@@ -96,6 +101,11 @@
             <x-responsive-nav-link :href="route('members.index')" :active="request()->routeIs('members.*')">
                 {{ __('Members') }}
             </x-responsive-nav-link>
+            @if(auth()->user()->isAdmin() || auth()->user()->hasRole('leader'))
+                <x-responsive-nav-link :href="route('first_timers.index')" :active="request()->routeIs('first_timers.*')">
+                    {{ __('First Timers') }}
+                </x-responsive-nav-link>
+            @endif
             @if(auth()->user()->isAdmin())
                 <x-responsive-nav-link :href="route('folds.index')" :active="request()->routeIs('folds.*')">
                     {{ __('Folds') }}

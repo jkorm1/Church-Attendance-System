@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container mx-auto py-6 max-w-4xl">
     <h1 class="text-2xl font-bold mb-4">Edit Member</h1>
@@ -36,7 +34,6 @@
                 <label class="block font-medium">Status</label>
                 <select name="status" class="w-full border rounded px-3 py-2" required>
                     <option value="member" <?php if(old('status', $member->status) == 'member'): ?> selected <?php endif; ?>>Member</option>
-                    <option value="first_timer" <?php if(old('status', $member->status) == 'first_timer'): ?> selected <?php endif; ?>>First Timer</option>
                 </select>
             </div>
             <div>
@@ -124,6 +121,24 @@
         const foldSelect = document.getElementById('fold_id');
         const initialCellId = '<?php echo e(old('cell_id', $member->cell_id)); ?>';
         const initialFoldId = '<?php echo e(old('fold_id', $member->fold_id)); ?>';
+        const cellLeaderSelect = document.querySelector('[name="cell_leader_of"]');
+        const assistantCellLeaderSelect = document.querySelector('[name="assistant_cell_leader_of"]');
+        const foldDiv = foldSelect.closest('div');
+
+        function checkLeaderAssignment() {
+            if ((cellLeaderSelect && cellLeaderSelect.value) || (assistantCellLeaderSelect && assistantCellLeaderSelect.value)) {
+                foldSelect.value = '';
+                foldSelect.disabled = true;
+                if (foldDiv) foldDiv.style.display = 'none';
+            } else {
+                foldSelect.disabled = false;
+                if (foldDiv) foldDiv.style.display = '';
+            }
+        }
+
+        if (cellLeaderSelect) cellLeaderSelect.addEventListener('change', checkLeaderAssignment);
+        if (assistantCellLeaderSelect) assistantCellLeaderSelect.addEventListener('change', checkLeaderAssignment);
+        checkLeaderAssignment();
 
         function fetchFolds(cellId, selectedFoldId = null) {
             foldSelect.innerHTML = '<option value="">Loading...</option>';

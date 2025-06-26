@@ -20,6 +20,7 @@
                     <th class="px-4 py-2 border">Cell</th>
                     <th class="px-4 py-2 border">Fold</th>
                     <th class="px-4 py-2 border">First Visit</th>
+                    <th class="px-4 py-2 border">Leader Role</th>
                     <th class="px-4 py-2 border">Actions</th>
                 </tr>
             </thead>
@@ -33,6 +34,20 @@
                     <td class="px-4 py-2 border">{{ $member->cell->name ?? 'N/A' }}</td>
                     <td class="px-4 py-2 border">{{ $member->fold->name ?? 'N/A' }}</td>
                     <td class="px-4 py-2 border">{{ $member->first_visit_date }}</td>
+                    <td class="px-4 py-2 border">
+                        @php
+                            $roles = [];
+                            if ($member->ledCell) $roles[] = 'Cell Leader';
+                            if ($member->assistantLedCell) $roles[] = 'Assistant Cell Leader';
+                            if ($member->ledFold) $roles[] = 'Fold Leader';
+                            if ($member->assistantLedFold) $roles[] = 'Assistant Fold Leader';
+                        @endphp
+                        @if(count($roles))
+                            <span class="text-green-700 font-semibold">{{ implode(', ', $roles) }}</span>
+                        @else
+                            <span class="text-gray-400">-</span>
+                        @endif
+                    </td>
                     <td class="px-4 py-2 border">
                         <a href="{{ route('members.edit', $member) }}" class="text-blue-600 hover:underline">Edit</a>
                         <form action="{{ route('members.destroy', $member) }}" method="POST" class="inline">

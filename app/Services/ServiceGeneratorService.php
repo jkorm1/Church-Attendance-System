@@ -99,4 +99,33 @@ class ServiceGeneratorService
             'service_number' => $serviceNumber
         ];
     }
+
+    /**
+     * Get upcoming services (alias for getAllServices for compatibility)
+     */
+    public function getUpcomingServices($days = 14)
+    {
+        return $this->getAllServices($days);
+    }
+
+    /**
+     * Get today's services only.
+     */
+    public function getTodayServices()
+    {
+        $today = \Carbon\Carbon::now();
+        $services = [];
+        if ($today->isWednesday()) {
+            $services[] = $this->createService('Wednesday Midweek Service', $today, 'auto_wednesday_');
+        }
+        if ($today->isFriday()) {
+            $services[] = $this->createService('Friday All Night Service', $today, 'auto_friday_');
+        }
+        if ($today->isSunday()) {
+            $services[] = $this->createService('Sunday 1st Service', $today, 'auto_sunday_1_', 1);
+            $services[] = $this->createService('Sunday 2nd Service', $today, 'auto_sunday_2_', 2);
+            $services[] = $this->createService('Sunday 3rd Service', $today, 'auto_sunday_3_', 3);
+        }
+        return $services;
+    }
 } 

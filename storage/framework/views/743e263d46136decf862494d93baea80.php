@@ -1,19 +1,12 @@
-<?php if (isset($component)) { $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54 = $attributes; } ?>
-<?php $component = App\View\Components\AppLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('app-layout'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-     <?php $__env->slot('header', null, []); ?> 
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <?php echo e(__('Dashboard')); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="bg-white shadow mb-6">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <?php echo e(__('Dashboard')); ?>
 
-        </h2>
-     <?php $__env->endSlot(); ?>
+            </h2>
+        </div>
+    </div>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -26,7 +19,7 @@
                 </div>
             </div>
 
-            <!-- Statistics Cards -->
+            <!-- Main Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
@@ -93,6 +86,140 @@
                 </div>
             </div>
 
+            <!-- First Timers & Conversions Analytics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-8 w-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3zm6 0c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-500">First Timers (Total)</div>
+                                <div class="text-2xl font-semibold text-gray-900"><?php echo e($firstTimersAnalytics['total']); ?></div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    This Month: <?php echo e($firstTimersAnalytics['this_month']); ?> | 
+                                    This Year: <?php echo e($firstTimersAnalytics['this_year']); ?>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-8 w-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-500">New Members (Converted)</div>
+                                <div class="text-2xl font-semibold text-gray-900"><?php echo e($newMembersAnalytics['this_month']); ?></div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    This Month | Total: <?php echo e($newMembersAnalytics['total_new']); ?>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-8 w-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-500">Conversion Rate</div>
+                                <div class="text-2xl font-semibold text-gray-900"><?php echo e($conversionAnalytics['monthly_rate']); ?>%</div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    This Month | Yearly: <?php echo e($conversionAnalytics['yearly_rate']); ?>%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time-based Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">This Week</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">First Timers:</span>
+                                <span class="font-semibold"><?php echo e($weeklyStats['first_timers']); ?></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Conversions:</span>
+                                <span class="font-semibold text-green-600"><?php echo e($weeklyStats['conversions']); ?></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Attendance:</span>
+                                <span class="font-semibold"><?php echo e($weeklyStats['attendance']); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">This Month</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">First Timers:</span>
+                                <span class="font-semibold"><?php echo e($monthlyStats['first_timers']); ?></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Conversions:</span>
+                                <span class="font-semibold text-green-600"><?php echo e($monthlyStats['conversions']); ?></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Attendance:</span>
+                                <span class="font-semibold"><?php echo e($monthlyStats['attendance']); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">This Year</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">First Timers:</span>
+                                <span class="font-semibold"><?php echo e($yearlyStats['first_timers']); ?></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Conversions:</span>
+                                <span class="font-semibold text-green-600"><?php echo e($yearlyStats['conversions']); ?></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Attendance:</span>
+                                <span class="font-semibold"><?php echo e($yearlyStats['attendance']); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex flex-wrap gap-4 mb-8">
+                <a href="<?php echo e(route('dashboard.cells')); ?>" class="bg-blue-100 text-blue-800 px-4 py-2 rounded hover:bg-blue-200 font-semibold">View by Cell</a>
+                <a href="<?php echo e(route('dashboard.folds')); ?>" class="bg-green-100 text-green-800 px-4 py-2 rounded hover:bg-green-200 font-semibold">View by Fold</a>
+                <a href="<?php echo e(route('dashboard.members')); ?>" class="bg-purple-100 text-purple-800 px-4 py-2 rounded hover:bg-purple-200 font-semibold">View by Member</a>
+                <a href="<?php echo e(route('dashboard.analytics')); ?>" class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded hover:bg-indigo-200 font-semibold">Detailed Analytics</a>
+            </div>
+
             <!-- Main Content Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Quick Actions -->
@@ -106,6 +233,12 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                                     </svg>
                                     <span class="text-gray-700">Take Attendance</span>
+                                </a>
+                                <a href="<?php echo e(route('first_timers.create')); ?>" class="flex items-center p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors">
+                                    <svg class="h-5 w-5 text-pink-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    <span class="text-gray-700">Register First Timer</span>
                                 </a>
                                 <a href="<?php echo e(route('members.create')); ?>" class="flex items-center p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
                                     <svg class="h-5 w-5 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,77 +257,48 @@
                     </div>
                 </div>
 
-                <!-- Upcoming Services -->
+                <!-- Top Performers -->
                 <div class="lg:col-span-1">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Services</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Inviters</h3>
                             <div class="space-y-3">
-                                <?php
-                                    $upcomingServices = app('App\Services\ServiceGeneratorService')->getUpcomingServices();
-                                    $todayServices = app('App\Services\ServiceGeneratorService')->getTodayServices();
-                                    $nextServices = array_slice(array_merge($todayServices, $upcomingServices), 0, 5);
-                                ?>
-                                
-                                <?php $__empty_1 = true; $__currentLoopData = $nextServices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <?php $__empty_1 = true; $__currentLoopData = $topInviters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $inviter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex items-center">
-                                            <div class="w-2 h-2 rounded-full <?php echo e($service['service_date'] === \Carbon\Carbon::now()->format('Y-m-d') ? 'bg-green-500' : 'bg-blue-500'); ?> mr-3"></div>
-                                            <div>
-                                                <div class="text-sm font-medium text-gray-900"><?php echo e($service['name']); ?></div>
-                                                <div class="text-xs text-gray-500"><?php echo e(\Carbon\Carbon::parse($service['service_date'])->format('M j, Y')); ?></div>
-                                            </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900"><?php echo e($inviter->name); ?></div>
+                                            <div class="text-xs text-gray-500"><?php echo e($inviter->invitees_count); ?> conversions</div>
                                         </div>
-                                        <?php if(isset($service['id'])): ?>
-                                            <a href="<?php echo e(route('attendance.index', $service['id'])); ?>" class="text-xs text-blue-600 hover:text-blue-800">
-                                                Take Attendance
-                                            </a>
-                                        <?php else: ?>
-                                            <span class="text-xs text-gray-400 cursor-not-allowed">Take Attendance</span>
-                                        <?php endif; ?>
+                                        <div class="text-xs text-green-600 font-semibold">
+                                            <?php echo e($inviter->invitees_count > 0 ? round(($inviter->invitees_count / $newMembersAnalytics['total_new']) * 100, 1) : 0); ?>%
+                                        </div>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                    <div class="text-center text-gray-500 py-4">
-                                        No upcoming services
-                                    </div>
+                                    <div class="text-sm text-gray-500">No inviters found</div>
                                 <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
+                <!-- Top Cells -->
                 <div class="lg:col-span-1">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Performing Cells</h3>
                             <div class="space-y-3">
-                                <?php
-                                    $recentAttendance = \App\Models\Attendance::with(['member'])
-                                        ->latest()
-                                        ->take(5)
-                                        ->get();
-                                ?>
-                                
-                                <?php $__empty_1 = true; $__currentLoopData = $recentAttendance; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attendance): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <?php $__empty_1 = true; $__currentLoopData = $topCells; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cell): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex items-center">
-                                            <div class="w-2 h-2 rounded-full <?php echo e($attendance->present ? 'bg-green-500' : 'bg-red-500'); ?> mr-3"></div>
-                                            <div>
-                                                <div class="text-sm font-medium text-gray-900"><?php echo e($attendance->member->name ?? 'Unknown'); ?></div>
-                                                <div class="text-xs text-gray-500"><?php echo e($attendance->present ? 'Marked Present' : 'Marked Absent'); ?></div>
-                                            </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900"><?php echo e($cell->name); ?></div>
+                                            <div class="text-xs text-gray-500"><?php echo e($cell->members_count); ?> members</div>
                                         </div>
-                                        <span class="text-xs text-gray-500"><?php echo e($attendance->created_at->diffForHumans()); ?></span>
+                                        <div class="text-xs text-blue-600 font-semibold">
+                                            <?php echo e($cell->folds_count); ?> folds
+                                        </div>
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                    <div class="text-center text-gray-500 py-4">
-                                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                        </svg>
-                                        <p class="mt-2 text-sm">No attendance records yet</p>
-                                        <p class="text-xs">Start by taking attendance for a service</p>
-                                    </div>
+                                    <div class="text-sm text-gray-500">No cells found</div>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -202,37 +306,44 @@
                 </div>
             </div>
 
-            <!-- Getting Started Section (if no data) -->
-            <?php if($totalMembers == 0): ?>
-                <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="text-lg font-semibold text-blue-800">Getting Started</h3>
-                            <p class="text-blue-700">Welcome to your church attendance system! To get started:</p>
-                            <div class="mt-2 space-y-1 text-sm text-blue-600">
-                                <p>1. <a href="<?php echo e(route('members.create')); ?>" class="underline">Add your first member</a></p>
-                                <p>2. <a href="<?php echo e(route('services.index')); ?>" class="underline">Take attendance for upcoming services</a></p>
-                                <p>3. View statistics and reports on this dashboard</p>
-                            </div>
+            <!-- Upcoming Services -->
+            <div class="mt-6">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Services</h3>
+                        <div class="space-y-3">
+                            <?php
+                                $upcomingServices = app('App\Services\ServiceGeneratorService')->getUpcomingServices();
+                                $todayServices = app('App\Services\ServiceGeneratorService')->getTodayServices();
+                                $nextServices = array_slice(array_merge($todayServices, $upcomingServices), 0, 5);
+                            ?>
+                            
+                            <?php $__empty_1 = true; $__currentLoopData = $nextServices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 rounded-full <?php echo e($service['service_date'] === \Carbon\Carbon::now()->format('Y-m-d') ? 'bg-green-500' : 'bg-blue-500'); ?> mr-3"></div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900"><?php echo e($service['name']); ?></div>
+                                            <div class="text-xs text-gray-500"><?php echo e(\Carbon\Carbon::parse($service['service_date'])->format('M j, Y')); ?></div>
+                                        </div>
+                                    </div>
+                                    <?php if(isset($service['id'])): ?>
+                                        <a href="<?php echo e(route('attendance.index', $service['id'])); ?>" class="text-xs text-blue-600 hover:text-blue-800">
+                                            Take Attendance
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-xs text-gray-400 cursor-not-allowed">Take Attendance</span>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <div class="text-sm text-gray-500">No upcoming services</div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            <?php endif; ?>
+            </div>
         </div>
     </div>
- <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
-<?php $attributes = $__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
-<?php unset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
-<?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
-<?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/dashboard.blade.php ENDPATH**/ ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/dashboard.blade.php ENDPATH**/ ?>

@@ -29,6 +29,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cell</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fold Leaders</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
@@ -44,6 +45,19 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">{{ $fold->cell->name ?? 'N/A' }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">
+                                    @if($fold->foldLeader)
+                                        <span class="font-semibold">Leader:</span> {{ $fold->foldLeader->name }}<br>
+                                    @endif
+                                    @if($fold->assistantLeader)
+                                        <span class="font-semibold">Assistant:</span> {{ $fold->assistantLeader->name }}
+                                    @endif
+                                    @if(!$fold->foldLeader && !$fold->assistantLeader)
+                                        <span class="text-gray-400">None</span>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $fold->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">

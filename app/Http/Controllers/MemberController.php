@@ -27,12 +27,12 @@ class MemberController extends Controller
             $members = $query->paginate(20);
         } elseif ($user->isCellLeader()) {
             $cell = $user->getLedCell();
-            $members = $cell ? $query->where('cell_id', $cell->id)->paginate(20) : collect([]);
+            $members = $cell ? $query->where('cell_id', $cell->id)->paginate(20) : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
         } elseif ($user->isFoldLeader()) {
             $fold = $user->getLedFold();
-            $members = $fold ? $query->where('fold_id', $fold->id)->paginate(20) : collect([]);
+            $members = $fold ? $query->where('fold_id', $fold->id)->paginate(20) : new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
         } else {
-            $members = collect([]);
+            $members = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
         }
         
         return view('members.index', compact('members'));
@@ -196,6 +196,12 @@ class MemberController extends Controller
             return;
         }
 
+        // If assigning as cell leader or assistant, remove from any fold
+        if ($request->filled('cell_leader_of') || $request->filled('assistant_cell_leader_of')) {
+            $member->fold_id = null;
+            $member->save();
+        }
+
         $this->assignLeadership('cell_leader_of', Cell::class, 'cell_leader_id', $member, $request);
         $this->assignLeadership('assistant_cell_leader_of', Cell::class, 'assistant_leader_id', $member, $request);
         $this->assignLeadership('fold_leader_of', Fold::class, 'fold_leader_id', $member, $request);
@@ -226,6 +232,12 @@ class MemberController extends Controller
                     // No need to remove user, just the role
                 }
                 $modelToLead->update([$leaderColumn => $member->id]);
+                // If assigning as fold leader, ensure member is in the correct cell and fold
+                if ($modelClass === \App\Models\Fold::class) {
+                    $member->cell_id = $modelToLead->cell_id;
+                    $member->fold_id = $modelToLead->id;
+                    $member->save();
+                }
                 $this->createUserForLeader($member, 'usher');
             }
         }

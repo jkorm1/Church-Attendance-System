@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container mx-auto py-6">
     <div class="flex justify-between items-center mb-4">
@@ -20,6 +18,7 @@
                     <th class="px-4 py-2 border">Cell</th>
                     <th class="px-4 py-2 border">Fold</th>
                     <th class="px-4 py-2 border">First Visit</th>
+                    <th class="px-4 py-2 border">Leader Role</th>
                     <th class="px-4 py-2 border">Actions</th>
                 </tr>
             </thead>
@@ -33,6 +32,20 @@
                     <td class="px-4 py-2 border"><?php echo e($member->cell->name ?? 'N/A'); ?></td>
                     <td class="px-4 py-2 border"><?php echo e($member->fold->name ?? 'N/A'); ?></td>
                     <td class="px-4 py-2 border"><?php echo e($member->first_visit_date); ?></td>
+                    <td class="px-4 py-2 border">
+                        <?php
+                            $roles = [];
+                            if ($member->ledCell) $roles[] = 'Cell Leader';
+                            if ($member->assistantLedCell) $roles[] = 'Assistant Cell Leader';
+                            if ($member->ledFold) $roles[] = 'Fold Leader';
+                            if ($member->assistantLedFold) $roles[] = 'Assistant Fold Leader';
+                        ?>
+                        <?php if(count($roles)): ?>
+                            <span class="text-green-700 font-semibold"><?php echo e(implode(', ', $roles)); ?></span>
+                        <?php else: ?>
+                            <span class="text-gray-400">-</span>
+                        <?php endif; ?>
+                    </td>
                     <td class="px-4 py-2 border">
                         <a href="<?php echo e(route('members.edit', $member)); ?>" class="text-blue-600 hover:underline">Edit</a>
                         <form action="<?php echo e(route('members.destroy', $member)); ?>" method="POST" class="inline">

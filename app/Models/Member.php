@@ -33,7 +33,7 @@ class Member extends Model
 
     public function invitees()
     {
-        return $this->hasMany(Member::class, 'invited_by');
+        return $this->hasMany(FirstTimer::class, 'invited_by');
     }
 
     public function attendances()

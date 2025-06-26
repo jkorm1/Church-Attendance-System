@@ -26,6 +26,9 @@ return new class extends Migration
                 $table->date('date_converted')->nullable();
                 $table->date('last_attended')->nullable();
                 $table->text('notes')->nullable();
+                if (!Schema::hasColumn('members', 'location')) {
+                    $table->string('location')->nullable();
+                }
                 $table->timestamps();
 
                 $table->foreign('invited_by')->references('id')->on('members')->nullOnDelete();
