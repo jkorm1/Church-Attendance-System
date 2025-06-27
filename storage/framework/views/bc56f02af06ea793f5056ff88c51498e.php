@@ -9,13 +9,23 @@
         </div>
     <?php endif; ?>
 
-    <form action="<?php echo e(route('members.store')); ?>" method="POST" class="space-y-4">
+    <form action="<?php echo e(route('members.store')); ?>" method="POST" class="space-y-6 font-montserrat bg-white shadow-md rounded-lg p-6 border border-[#3a1d09]">
         <?php echo csrf_field(); ?>
-        
+        <h3 class="text-lg font-semibold mb-4 text-[#3a1d09]">Member Information</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label class="block font-medium">Name</label>
-                <input type="text" name="name" class="w-full border rounded px-3 py-2" value="<?php echo e(old('name')); ?>" required>
+                <label for="name" class="block text-sm font-bold text-[#3a1d09] mb-2">Full Name *</label>
+                <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-[#3a1d09] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f58502] font-montserrat" value="<?php echo e(old('name')); ?>" required>
+                <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="text-red-500 text-sm mt-1"><?php echo e($message); ?></p>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
             </div>
             <div>
                 <label class="block font-medium">Phone</label>
@@ -93,9 +103,26 @@
         </div>
         <?php endif; ?>
 
-        <div class="flex justify-between">
-            <a href="<?php echo e(route('members.index')); ?>" class="text-gray-600">Cancel</a>
-            <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Add Member</button>
+        <div class="flex justify-end">
+            <?php if (isset($component)) { $__componentOriginald411d1792bd6cc877d687758b753742c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald411d1792bd6cc877d687758b753742c = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.primary-button','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('primary-button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?><?php echo e(__('Add Member')); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald411d1792bd6cc877d687758b753742c)): ?>
+<?php $attributes = $__attributesOriginald411d1792bd6cc877d687758b753742c; ?>
+<?php unset($__attributesOriginald411d1792bd6cc877d687758b753742c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald411d1792bd6cc877d687758b753742c)): ?>
+<?php $component = $__componentOriginald411d1792bd6cc877d687758b753742c; ?>
+<?php unset($__componentOriginald411d1792bd6cc877d687758b753742c); ?>
+<?php endif; ?>
         </div>
     </form>
 </div>

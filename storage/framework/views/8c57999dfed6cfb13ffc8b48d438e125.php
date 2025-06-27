@@ -42,7 +42,7 @@
         </div>
         <div class="bg-white p-4 rounded-lg shadow border border-[#3a1d09]">
             <div class="text-sm text-[#3a1d09]">Absent</div>
-            <div class="text-2xl font-bold text-red-600"><?php echo e($memberAttendance->filter(fn($present) => !$present)->count()); ?></div>
+            <div class="text-2xl font-bold text-red-600"><?php echo e($memberAttendance->filter(fn($present) => !$present)->count() + $firstTimerAttendance->filter(fn($present) => !$present)->count()); ?></div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow border border-[#3a1d09]">
             <div class="text-sm text-[#3a1d09]">Unmarked</div>
@@ -166,7 +166,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             <?php if(isset($firstTimerAttendance[$firstTimer->id])): ?>
                                 <?php if($firstTimerAttendance[$firstTimer->id]): ?>
-                                    <span class="text-green-600 font-bold">✓ Present</span>
+                                    <span class="text-green-600 font-bold">✓ Present (Auto)</span>
                                 <?php else: ?>
                                     <span class="text-red-600 font-bold">✗ Absent</span>
                                 <?php endif; ?>
@@ -175,33 +175,18 @@
                             <?php endif; ?>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <?php if(!isset($firstTimerAttendance[$firstTimer->id])): ?>
-                                <div class="flex space-x-2">
-                                    <form action="<?php echo e(route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id])); ?>" method="POST">
-                                        <?php echo csrf_field(); ?>
-                                        <input type="hidden" name="present" value="1">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-green-500 border border-green-700 rounded shadow-sm hover:bg-green-600">Present</button>
-                                    </form>
-                                    <form action="<?php echo e(route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id])); ?>" method="POST">
-                                        <?php echo csrf_field(); ?>
-                                        <input type="hidden" name="present" value="0">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-white bg-red-500 border border-red-700 rounded shadow-sm hover:bg-red-600">Absent</button>
-                                    </form>
-                                </div>
-                            <?php else: ?>
-                                <div class="flex space-x-2">
-                                    <form action="<?php echo e(route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id])); ?>" method="POST">
-                                        <?php echo csrf_field(); ?>
-                                        <input type="hidden" name="present" value="1">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Present</button>
-                                    </form>
-                                    <form action="<?php echo e(route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id])); ?>" method="POST">
-                                        <?php echo csrf_field(); ?>
-                                        <input type="hidden" name="present" value="0">
-                                        <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Absent</button>
-                                    </form>
-                                </div>
-                            <?php endif; ?>
+                            <div class="flex space-x-2">
+                                <form action="<?php echo e(route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id])); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="present" value="1">
+                                    <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Present</button>
+                                </form>
+                                <form action="<?php echo e(route('attendance.markFirstTimer', ['service' => $service->id, 'firstTimer' => $firstTimer->id])); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="present" value="0">
+                                    <button type="submit" class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-200 border border-gray-400 rounded shadow-sm" disabled>Absent</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -8,230 +8,228 @@
         <title><?php echo e(config('app.name', 'Charisword Gospel Ministry')); ?></title>
 
         <!-- Montserrat Font -->
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Font Awesome for enhanced icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
-        <style>
-            body {
-                font-family: 'Montserrat', sans-serif !important;
-                background: #fff;
-            }
-            .main-container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 2rem 1rem 4rem 1rem;
-            }
-            .app-card {
-                background: #fff;
-                border: 2px solid #3a1d09;
-                border-radius: 1.5rem;
-                box-shadow: 0 8px 32px 0 rgba(60, 30, 9, 0.10);
-                padding: 2rem 1.5rem;
-                margin-bottom: 2rem;
-            }
-            .app-footer {
-                text-align: center;
-                font-size: 0.98rem;
-                color: #3a1d09;
-                margin-top: 2.5rem;
-                padding: 2rem 0 1rem 0;
-                border-top: 1px solid #eee;
-                background: #fff;
-            }
-            .app-footer .socials {
-                margin-bottom: 0.5rem;
-            }
-            .app-footer a {
-                color: #f58502;
-                text-decoration: none;
-                margin: 0 0.3rem;
-                font-weight: 600;
-            }
-            .app-footer .payment {
-                margin-top: 1rem;
-                font-size: 0.95rem;
-                color: #3a1d09;
-            }
-            .glass-card {
-                background: rgba(255,255,255,0.7);
-                border: 1.5px solid #f58502;
-                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border-radius: 2rem;
-            }
-            .sidebar {
-                background: #3a1d09;
-                color: #fff;
-                min-height: 100vh;
-                border-top-right-radius: 2rem;
-                border-bottom-right-radius: 2rem;
-                box-shadow: 2px 0 16px 0 rgba(58,29,9,0.15);
-            }
-            .sidebar a { color: #fff; font-weight: 600; transition: background 0.2s, color 0.2s; border-radius: 0.75rem; }
-            .sidebar a.active, .sidebar a:hover { background: #f58502; color: #3a1d09; }
-            .hero-img {
-                width: 100%;
-                height: 260px;
-                object-fit: cover;
-                border-radius: 2rem 2rem 0 0;
-                position: relative;
-            }
-            .hero-overlay {
-                position: absolute;
-                top: 0; left: 0; width: 100%; height: 100%;
-                background: linear-gradient(90deg, #f58502cc 0%, #3a1d09cc 100%);
-                border-radius: 2rem 2rem 0 0;
-                z-index: 1;
-            }
-            .hero-content {
-                position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-                z-index: 2; color: #fff; text-align: center;
-            }
-            .animated-btn {
-                transition: transform 0.15s, box-shadow 0.15s;
-                box-shadow: 0 2px 8px 0 #f5850233;
-                position: relative;
-                overflow: hidden;
-            }
-            .animated-btn:hover {
-                transform: scale(1.05);
-                box-shadow: 0 4px 16px 0 #f5850266;
-            }
-            .animated-btn:active::after {
-                content: '';
-                position: absolute;
-                left: 50%; top: 50%;
-                width: 200%; height: 200%;
-                background: rgba(245,133,2,0.15);
-                border-radius: 50%;
-                transform: translate(-50%,-50%);
-                animation: ripple 0.4s linear;
-            }
-            @keyframes ripple {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-            @media (max-width: 900px) {
-                .sidebar { display: none; }
-                .main-content { margin-left: 0 !important; }
-            }
-            .active-glow {
-                background: #f58502 !important;
-                color: #3a1d09 !important;
-                box-shadow: 0 0 12px 2px #f58502cc;
-                border-radius: 0.75rem;
-            }
-            @media (max-width: 900px) {
-                .sidebar span { display: none; }
-                .sidebar { width: 72px !important; padding: 1rem !important; }
-                .sidebar nav a { justify-content: center; padding: 0.75rem 0 !important; }
-            }
-        </style>
     </head>
-    <body class="min-h-screen flex flex-col bg-white">
+    <body class="min-h-screen flex flex-col">
         <div class="flex min-h-screen">
             <!-- Sidebar -->
-            <aside class="sidebar w-64 p-8 flex flex-col gap-8 items-center justify-between hidden md:flex">
+            <aside class="sidebar w-72 p-8 flex flex-col gap-8 items-center justify-between hidden lg:flex">
                 <div class="flex flex-col gap-8 w-full">
-                    <div class="flex flex-col items-center gap-2">
-                        <img src="<?php echo e(asset('images/logoo.png')); ?>" alt="Church Logo" class="w-20 h-20 object-contain rounded-full border-4 border-[#f58502] bg-white" />
-                        <span class="text-lg font-bold tracking-wide">Charisword Gospel Ministry</span>
+                    <!-- Logo Section -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="relative">
+                            <img src="<?php echo e(asset('images/logoo.png')); ?>" alt="Church Logo" class="w-24 h-24 object-contain rounded-full border-4 border-[#f58502] bg-white shadow-lg" />
+                        </div>
+                        <div class="text-center">
+                            <h1 class="text-xl font-bold tracking-wide text-white">Charisword Gospel Ministry</h1>
+                            <p class="text-sm text-orange-200 mt-1">Raising Able Ministers of Grace</p>
+                        </div>
                     </div>
-                    <nav class="flex flex-col gap-3 mt-8 w-full">
-                        <a href="<?php echo e(route('dashboard')); ?>" class="flex items-center gap-3 py-2 px-4 transition-all duration-150 <?php if(request()->routeIs('dashboard')): ?> active-glow <?php endif; ?>">
-                            <!-- Home Icon -->
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h3m10-11v11a1 1 0 01-1 1h-3m-6 0h6" /></svg>
-                            <span>Dashboard</span>
+
+                    <!-- Navigation -->
+                    <nav class="sidebar-nav flex flex-col gap-3 mt-8 w-full">
+                        <a href="<?php echo e(route('dashboard')); ?>" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 <?php if(request()->routeIs('dashboard')): ?> active-glow <?php endif; ?>">
+                            <i class="fas fa-home text-lg"></i>
+                            <span class="font-semibold">Dashboard</span>
                         </a>
-                        <a href="<?php echo e(route('members.index')); ?>" class="flex items-center gap-3 py-2 px-4 transition-all duration-150 <?php if(request()->routeIs('members.*')): ?> active-glow <?php endif; ?>">
-                            <!-- Users Icon -->
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-7a4 4 0 11-8 0 4 4 0 018 0zm6 4a4 4 0 10-8 0 4 4 0 008 0z" /></svg>
-                            <span>Members</span>
+                        <a href="<?php echo e(route('members.index')); ?>" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 <?php if(request()->routeIs('members.*')): ?> active-glow <?php endif; ?>">
+                            <i class="fas fa-users text-lg"></i>
+                            <span class="font-semibold">Members</span>
                         </a>
-                        <a href="<?php echo e(route('folds.index')); ?>" class="flex items-center gap-3 py-2 px-4 transition-all duration-150 <?php if(request()->routeIs('folds.*')): ?> active-glow <?php endif; ?>">
-                            <!-- Collection Icon -->
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" /></svg>
-                            <span>Folds</span>
+                        <a href="<?php echo e(route('folds.index')); ?>" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 <?php if(request()->routeIs('folds.*')): ?> active-glow <?php endif; ?>">
+                            <i class="fas fa-layer-group text-lg"></i>
+                            <span class="font-semibold">Folds</span>
                         </a>
-                        <a href="<?php echo e(route('first_timers.index')); ?>" class="flex items-center gap-3 py-2 px-4 transition-all duration-150 <?php if(request()->routeIs('first_timers.*')): ?> active-glow <?php endif; ?>">
-                            <!-- User Add Icon -->
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v6m3-3h-6m-2 4a4 4 0 11-8 0 4 4 0 018 0zm6-4a4 4 0 10-8 0 4 4 0 008 0z" /></svg>
-                            <span>First Timers</span>
+                        <a href="<?php echo e(route('first_timers.index')); ?>" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 <?php if(request()->routeIs('first_timers.*')): ?> active-glow <?php endif; ?>">
+                            <i class="fas fa-user-plus text-lg"></i>
+                            <span class="font-semibold">First Timers</span>
                         </a>
-                        <a href="<?php echo e(route('services.index')); ?>" class="flex items-center gap-3 py-2 px-4 transition-all duration-150 <?php if(request()->routeIs('services.*')): ?> active-glow <?php endif; ?>">
-                            <!-- Calendar Icon -->
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            <span>Services</span>
+                        <a href="<?php echo e(route('services.index')); ?>" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 <?php if(request()->routeIs('services.*')): ?> active-glow <?php endif; ?>">
+                            <i class="fas fa-calendar-alt text-lg"></i>
+                            <span class="font-semibold">Services</span>
                         </a>
-                        <a href="<?php echo e(route('profile.edit')); ?>" class="flex items-center gap-3 py-2 px-4 transition-all duration-150 <?php if(request()->routeIs('profile.edit')): ?> active-glow <?php endif; ?>">
-                            <!-- User Circle Icon -->
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" /></svg>
-                            <span>Profile</span>
+                        <a href="<?php echo e(route('profile.edit')); ?>" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 <?php if(request()->routeIs('profile.edit')): ?> active-glow <?php endif; ?>">
+                            <i class="fas fa-user-circle text-lg"></i>
+                            <span class="font-semibold">Profile</span>
                         </a>
-                        <form method="POST" action="<?php echo e(route('logout')); ?>" class="w-full">
+                        
+                        <!-- Logout Button -->
+                        <form method="POST" action="<?php echo e(route('logout')); ?>" class="w-full mt-4">
                             <?php echo csrf_field(); ?>
-                            <button type="submit" class="flex items-center gap-3 py-2 px-4 w-full text-left transition-all duration-150">
-                                <!-- Logout Icon -->
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" /></svg>
-                                <span>Logout</span>
+                            <button type="submit" class="flex items-center gap-4 py-3 px-4 w-full text-left transition-all duration-200 hover:bg-red-600 hover:text-white rounded-lg">
+                                <i class="fas fa-sign-out-alt text-lg"></i>
+                                <span class="font-semibold">Logout</span>
                             </button>
                         </form>
                     </nav>
                 </div>
-                <div class="flex flex-col items-center gap-2">
-                    <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(auth()->user()->name ?? 'User')); ?>&background=f58502&color=fff&size=128" alt="Profile" class="w-14 h-14 rounded-full border-2 border-[#f58502]" />
-                    <span class="text-sm font-semibold"><?php echo e(auth()->user()->name ?? 'User'); ?></span>
-                </div>
-            </aside>
-            <!-- Main Content -->
-            <main class="flex-1 flex flex-col min-h-screen main-content md:ml-64">
-                <!-- Hero Section (Dashboard only, swap image below for ministry photo) -->
-                <?php if(request()->routeIs('dashboard')): ?>
-                <div class="relative mb-8">
-                    <img src="<?php echo e(asset('images/logo.png')); ?>" alt="Ministry Hero" class="hero-img" />
-                    <!-- TODO: Swap /images/logo.png for a ministry photo from Google Drive -->
-                    <div class="hero-overlay"></div>
-                    <div class="hero-content">
-                        <h1 class="text-4xl font-bold mb-2 drop-shadow">Welcome to Charisword Gospel Ministry</h1>
-                        <p class="text-lg font-semibold">Raising Kingdom Giants for Christ</p>
+
+                <!-- User Profile Section -->
+                <div class="flex flex-col items-center gap-3">
+                    <div class="relative">
+                        <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(auth()->user()->name ?? 'User')); ?>&background=f58502&color=fff&size=128&font-size=0.4" alt="Profile" class="w-16 h-16 rounded-full border-3 border-[#f58502] shadow-lg" />
+                        <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-sm font-semibold text-white"><?php echo e(auth()->user()->name ?? 'User'); ?></span>
+                        <p class="text-xs text-orange-200">Administrator</p>
                     </div>
                 </div>
-                <?php endif; ?>
-                <div class="p-6 md:p-12">
-                    <div class="glass-card p-8 md:p-12 mb-8">
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 flex flex-col min-h-screen main-content lg:ml-72">
+                <!-- Page Content -->
+                <div class="flex-1 p-6 lg:p-12">
+                    <div class="glass-card p-8 lg:p-12 mb-8">
                         <?php echo $__env->yieldContent('content'); ?>
                     </div>
                 </div>
+
                 <!-- Footer -->
-                <footer class="w-full bg-[#3a1d09] text-white py-8 px-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4 text-sm rounded-t-3xl shadow-xl">
-                    <div>
-                        <div class="font-bold text-lg mb-1">CONNECT WITH US</div>
-                        <div>Call or Message: 026 116 9859</div>
-                        <div>Location: Lashibi, Transformer Junction (Sakumono to Ashaiman Highway)</div>
-                        <div>Digital Address: GT-337-6599</div>
-                        <div>Google Maps: Search "Charisword Gospel Ministry"</div>
-                    </div>
-                    <div>
-                        <div class="font-bold mb-1">SOCIAL</div>
-                        <div>Facebook: Charisword Gospel Ministry</div>
-                        <div>Instagram/Tiktok: @charisword</div>
-                        <div>Twitter/X: @ChariswordM</div>
-                    </div>
-                    <div>
-                        <div class="font-bold mb-1">GIVING</div>
-                        <div>MTN MOMO: 0248645966</div>
-                        <div>TELECEL CASH: 364097</div>
-                        <div>FIDELITY BANK: 1050052233116</div>
-                        <div>STANBIC BANK: 9040011571950</div>
-                    </div>
-                    <div>
-                        <div class="font-bold mb-1">EMAIL</div>
-                        <div>chariswordgh@gmail.com</div>
+                <footer class="footer-modern">
+                    <div class="footer-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <!-- Contact Information -->
+                            <div class="footer-section">
+                                <h3><i class="fas fa-phone-alt mr-2"></i>CONNECT WITH US</h3>
+                                <div class="space-y-2 text-sm">
+                                    <p><i class="fas fa-phone mr-2"></i>Call or Message: <a href="tel:0261169859" class="hover:text-[#f58502] transition-colors">026 116 9859</a></p>
+                                    <p><i class="fas fa-map-marker-alt mr-2"></i>Location: Lashibi, Transformer Junction</p>
+                                    <p class="text-xs opacity-80 ml-6">(Sakumono to Ashaiman Highway)</p>
+                                    <p><i class="fas fa-map mr-2"></i>Digital Address: GT-337-6599</p>
+                                    <p><i class="fas fa-search mr-2"></i>Google Maps: Search "Charisword Gospel Ministry"</p>
+                                </div>
+                            </div>
+
+                            <!-- Social Media -->
+                            <div class="footer-section">
+                                <h3><i class="fas fa-share-alt mr-2"></i>SOCIAL MEDIA</h3>
+                                <div class="space-y-2 text-sm">
+                                    <p><i class="fab fa-facebook mr-2"></i><a href="https://facebook.com/chariswordgospelministry" target="_blank" class="hover:text-[#f58502] transition-colors">Charisword Gospel Ministry</a></p>
+                                    <p><i class="fab fa-instagram mr-2"></i><a href="https://instagram.com/charisword" target="_blank" class="hover:text-[#f58502] transition-colors">@charisword</a></p>
+                                    <p><i class="fab fa-tiktok mr-2"></i><a href="https://tiktok.com/@charisword" target="_blank" class="hover:text-[#f58502] transition-colors">@charisword</a></p>
+                                    <p><i class="fab fa-twitter mr-2"></i><a href="https://twitter.com/ChariswordM" target="_blank" class="hover:text-[#f58502] transition-colors">@ChariswordM</a></p>
+                                </div>
+                            </div>
+
+                            <!-- Giving & Support -->
+                            <div class="footer-section">
+                                <h3><i class="fas fa-heart mr-2"></i>GIVING & SUPPORT</h3>
+                                <div class="space-y-2 text-sm">
+                                    <p><i class="fas fa-mobile-alt mr-2"></i>MTN MOMO: <span class="font-bold">0248645966</span></p>
+                                    <p><i class="fas fa-credit-card mr-2"></i>TELECEL CASH: <span class="font-bold">364097</span></p>
+                                    <p><i class="fas fa-university mr-2"></i>FIDELITY BANK: <span class="font-bold">1050052233116</span></p>
+                                    <p><i class="fas fa-university mr-2"></i>STANBIC BANK: <span class="font-bold">9040011571950</span></p>
+                                </div>
+                            </div>
+
+                            <!-- Contact & Email -->
+                            <div class="footer-section">
+                                <h3><i class="fas fa-envelope mr-2"></i>CONTACT US</h3>
+                                <div class="space-y-2 text-sm">
+                                    <p><i class="fas fa-envelope mr-2"></i><a href="mailto:chariswordgh@gmail.com" class="hover:text-[#f58502] transition-colors">chariswordgh@gmail.com</a></p>
+                                    <p><i class="fas fa-globe mr-2"></i>Website: <a href="#" class="hover:text-[#f58502] transition-colors">charisword.org</a></p>
+                                    <p><i class="fas fa-pray mr-2"></i>Prayer Requests</p>
+                                    <p><i class="fas fa-hands-helping mr-2"></i>Volunteer Opportunities</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Copyright -->
+                        <div class="mt-8 pt-6 border-t border-white border-opacity-20 text-center">
+                            <p class="text-sm opacity-80">
+                                © <?php echo e(date('Y')); ?> Charisword Gospel Ministry. All rights reserved. 
+                                <span class="text-[#f58502] font-semibold">Raising Able Ministers of Grace</span>
+                            </p>
+                        </div>
                     </div>
                 </footer>
             </main>
         </div>
+
+        <!-- Mobile Navigation Toggle -->
+        <div class="lg:hidden fixed bottom-6 right-6 z-50">
+            <button id="mobile-nav-toggle" class="bg-[#f58502] text-white p-4 rounded-full shadow-lg hover:bg-[#e67600] transition-all duration-200">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-nav" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 hidden">
+            <div class="absolute right-0 top-0 h-full w-80 bg-[#3a1d09] p-6 transform translate-x-full transition-transform duration-300">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-white text-xl font-bold">Menu</h2>
+                    <button id="mobile-nav-close" class="text-white text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="<?php echo e(route('dashboard')); ?>" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="<?php echo e(route('members.index')); ?>" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
+                        <i class="fas fa-users"></i>
+                        <span>Members</span>
+                    </a>
+                    <a href="<?php echo e(route('folds.index')); ?>" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Folds</span>
+                    </a>
+                    <a href="<?php echo e(route('first_timers.index')); ?>" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
+                        <i class="fas fa-user-plus"></i>
+                        <span>First Timers</span>
+                    </a>
+                    <a href="<?php echo e(route('services.index')); ?>" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Services</span>
+                    </a>
+                    <a href="<?php echo e(route('profile.edit')); ?>" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                    <form method="POST" action="<?php echo e(route('logout')); ?>" class="w-full">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit" class="flex items-center gap-4 py-3 px-4 w-full text-left text-white hover:bg-red-600 rounded-lg transition-all duration-200">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
         <?php echo $__env->yieldPushContent('scripts'); ?>
+        
+        <script>
+            // Mobile Navigation Toggle
+            document.getElementById('mobile-nav-toggle').addEventListener('click', function() {
+                document.getElementById('mobile-nav').classList.remove('hidden');
+                setTimeout(() => {
+                    document.querySelector('#mobile-nav > div').classList.remove('translate-x-full');
+                }, 10);
+            });
+
+            document.getElementById('mobile-nav-close').addEventListener('click', function() {
+                document.querySelector('#mobile-nav > div').classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.getElementById('mobile-nav').classList.add('hidden');
+                }, 300);
+            });
+
+            // Close mobile nav when clicking outside
+            document.getElementById('mobile-nav').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    document.querySelector('#mobile-nav > div').classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.getElementById('mobile-nav').classList.add('hidden');
+                    }, 300);
+                }
+            });
+        </script>
     </body>
-</html>
-<?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/layouts/app.blade.php ENDPATH**/ ?>

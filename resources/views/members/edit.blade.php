@@ -35,6 +35,7 @@
                 <label class="block font-medium">Status</label>
                 <select name="status" class="w-full border rounded px-3 py-2" required>
                     <option value="member" @if(old('status', $member->status) == 'member') selected @endif>Member</option>
+                    <option value="first_timer" @if(old('status', $member->status) == 'first_timer') selected @endif>First Timer</option>
                 </select>
             </div>
             <div>
@@ -122,24 +123,6 @@
         const foldSelect = document.getElementById('fold_id');
         const initialCellId = '{{ old('cell_id', $member->cell_id) }}';
         const initialFoldId = '{{ old('fold_id', $member->fold_id) }}';
-        const cellLeaderSelect = document.querySelector('[name="cell_leader_of"]');
-        const assistantCellLeaderSelect = document.querySelector('[name="assistant_cell_leader_of"]');
-        const foldDiv = foldSelect.closest('div');
-
-        function checkLeaderAssignment() {
-            if ((cellLeaderSelect && cellLeaderSelect.value) || (assistantCellLeaderSelect && assistantCellLeaderSelect.value)) {
-                foldSelect.value = '';
-                foldSelect.disabled = true;
-                if (foldDiv) foldDiv.style.display = 'none';
-            } else {
-                foldSelect.disabled = false;
-                if (foldDiv) foldDiv.style.display = '';
-            }
-        }
-
-        if (cellLeaderSelect) cellLeaderSelect.addEventListener('change', checkLeaderAssignment);
-        if (assistantCellLeaderSelect) assistantCellLeaderSelect.addEventListener('change', checkLeaderAssignment);
-        checkLeaderAssignment();
 
         function fetchFolds(cellId, selectedFoldId = null) {
             foldSelect.innerHTML = '<option value="">Loading...</option>';

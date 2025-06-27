@@ -37,12 +37,20 @@ class FirstTimerController extends Controller
             $query->whereDate('first_visit_date', $date);
         }
 
-        $firstTimers = $query->orderByDesc('created_at')->get();
+        $firstTimers = $query->orderByDesc('created_at')->paginate(20);
 
-        // Summary stats
-        $total = $firstTimers->count();
-        $stay = $firstTimers->where('purpose', 'stay')->count();
-        $visit = $firstTimers->where('purpose', 'visit')->count();
+        // Summary stats - get all records for stats calculation
+        $statsQuery = FirstTimer::query();
+        if ($serviceId) {
+            $statsQuery->where('service_id', $serviceId);
+        } elseif ($date) {
+            $statsQuery->whereDate('first_visit_date', $date);
+        }
+        $allFirstTimers = $statsQuery->get();
+        
+        $total = $allFirstTimers->count();
+        $stay = $allFirstTimers->where('purpose', 'stay')->count();
+        $visit = $allFirstTimers->where('purpose', 'visit')->count();
 
         // Get service info if filtering by service
         $service = null;

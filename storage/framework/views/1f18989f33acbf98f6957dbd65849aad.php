@@ -8,121 +8,186 @@
         <title><?php echo e(config('app.name', 'Charisword Gospel Ministry')); ?></title>
 
         <!-- Montserrat Font -->
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <!-- Font Awesome for enhanced icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+        
         <style>
-            body {
-                font-family: 'Montserrat', sans-serif !important;
-                background: #fff;
-            }
             .auth-hero-bg {
-                background: linear-gradient(120deg, #f58502cc 0%, #fff0 100%), url('/images/logo.png') center/cover no-repeat; /* TODO: Replace with hero image from Google Drive */
-                min-height: 100vh;
+                background-image: url('<?php echo e(asset("images/bg.png")); ?>');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: ;
+                position: relative;
             }
-            .auth-card {
-                border: 2px solid #3a1d09;
-                box-shadow: 0 8px 32px 0 rgba(60, 30, 9, 0.15);
-                border-radius: 1.5rem;
-                background: #fff;
-                padding: 2.5rem 2rem;
-                max-width: 420px;
-                margin: 2rem auto;
+            
+            /* Add overlay for better text readability */
+            .auth-hero-bg::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, rgba(245, 133, 2, 0.8), rgba(255, 154, 46, 0.6));
+                z-index: 1;
             }
-            .auth-logo {
-                width: 90px;
-                height: 90px;
-                margin: 0 auto 1.5rem auto;
-                display: block;
+            
+            /* Ensure content appears above overlay */
+            .auth-hero-bg > * {
+                position: relative;
+                z-index: 2;
             }
-            .auth-welcome {
-                text-align: center;
-                font-weight: 700;
-                color: #3a1d09;
-                font-size: 1.5rem;
-                margin-bottom: 0.5rem;
-            }
-            .auth-tagline {
-                text-align: center;
-                color: #f58502;
-                font-size: 1rem;
-                margin-bottom: 2rem;
-                font-weight: 500;
-            }
-            .auth-footer {
-                text-align: center;
-                font-size: 0.95rem;
-                color: #3a1d09;
-                margin-top: 2.5rem;
-                padding: 1.5rem 0 0.5rem 0;
-                border-top: 1px solid #eee;
-                background: #fff;
-            }
-            .auth-footer .socials {
-                margin-bottom: 0.5rem;
-            }
-            .auth-footer a {
-                color: #f58502;
-                text-decoration: none;
-                margin: 0 0.3rem;
-                font-weight: 600;
-            }
-            .auth-footer .payment {
-                margin-top: 1rem;
-                font-size: 0.93rem;
-                color: #3a1d09;
-            }
-            @media (min-width: 900px) {
-                .auth-flex {
-                    display: flex;
-                    min-height: 100vh;
-                }
-                .auth-hero-bg {
-                    flex: 1 1 0%;
-                    min-width: 0;
-                    border-top-right-radius: 2rem;
-                    border-bottom-right-radius: 2rem;
-                }
-                .auth-card-wrap {
-                    flex: 1 1 0%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: #fff;
-                }
+            
+            /* Alternative: If you want to use a placeholder image */
+            .auth-hero-bg-placeholder {
+                background-image: url('/placeholder.svg?height=800&width=1200');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
             }
         </style>
     </head>
-    <body>
+    <body class="min-h-screen">
         <div class="auth-flex">
+            <!-- Auth Form Section -->
             <div class="auth-card-wrap">
                 <div class="auth-card">
-                    <img src="<?php echo e(asset('images/logoo.png')); ?>" alt="Church Logo" class="auth-logo" />
-                    <div class="auth-welcome">Welcome to Charisword Gospel Ministry</div>
-                    <div class="auth-tagline">Raising Kingdom Giants • Transforming Lives</div>
+                    <!-- Logo and Welcome -->
+                    <div class="text-center mb-8">
+                        <div class="relative inline-block">
+                            <img src="<?php echo e(asset('images/logoo.png')); ?>" alt="Church Logo" class="auth-logo animate-float" />
+                            <div class="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-[#f58502] to-[#ff9a2e] rounded-full flex items-center justify-center animate-pulse-slow">
+                                <i class="fas fa-cross text-white text-sm"></i>
+                            </div>
+                        </div>
+                        <h1 class="auth-welcome">Welcome to Charisword Gospel Ministry</h1>
+                        <p class="auth-tagline">Raising Able Ministers of Grace • Transforming Lives</p>
+                    </div>
+
+                    <!-- Auth Content -->
                     <?php echo e($slot); ?>
 
+
+                    <!-- Ministry Information -->
+                    <div class="mt-8 p-6 bg-gradient-to-r from-[#f58502] to-[#ff9a2e] rounded-2xl text-white">
+                        <h3 class="text-lg font-bold mb-4 text-center">
+                            <i class="fas fa-church mr-2"></i>Join Our Ministry
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p><i class="fas fa-phone mr-2"></i>Call: <a href="tel:0261169859" class="underline">026 116 9859</a></p>
+                                <p><i class="fas fa-map-marker-alt mr-2"></i>Lashibi, Transformer Junction</p>
+                            </div>
+                            <div>
+                                <p><i class="fab fa-facebook mr-2"></i>@charisword</p>
+                                <p><i class="fab fa-instagram mr-2"></i>@charisword</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="auth-hero-bg d-none d-lg-block">
-                <!-- TODO: Replace /images/logo.png with a beautiful hero image from your Google Drive -->
+
+            <!-- Hero Section with Background Image -->
+            <div class="auth-hero-bg">
+                <div class="relative h-full flex items-center justify-center">
+                    <div class="text-center text-white z-10">
+                        <h2 class="text-4xl lg:text-6xl font-bold mb-6 drop-shadow-lg">
+                            Raising Able Ministers of Grace
+                        </h2>
+                        <p class="text-xl lg:text-2xl mb-8 opacity-90 drop-shadow">
+                            Transforming Lives Through Christ
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6">
+                                <i class="fas fa-pray text-3xl mb-4"></i>
+                                <h3 class="text-lg font-bold mb-2">Worship</h3>
+                                <p class="text-sm opacity-90">Experience powerful worship services</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6">
+                                <i class="fas fa-hands-helping text-3xl mb-4"></i>
+                                <h3 class="text-lg font-bold mb-2">Community</h3>
+                                <p class="text-sm opacity-90">Join our loving church family</p>
+                            </div>
+                            <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-6">
+                                <i class="fas fa-heart text-3xl mb-4"></i>
+                                <h3 class="text-lg font-bold mb-2">Growth</h3>
+                                <p class="text-sm opacity-90">Grow in faith and purpose</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Enhanced Footer -->
         <div class="auth-footer">
-            <div class="socials">
-                <strong>CONNECT WITH US</strong><br>
-                Call/Message: <a href="tel:0261169859">026 116 9859</a> &bull; Location: Lashibi, Transformer Junction (Sakumono to Ashaiman Highway)<br>
-                Digital Address: GT-337-6599 &bull; <a href="https://goo.gl/maps/yourmaplink" target="_blank">Google Maps</a><br>
-                Facebook: <a href="https://facebook.com/chariswordgospelministry" target="_blank">Charisword Gospel Ministry</a> &bull;
-                Instagram/Tiktok: <a href="https://instagram.com/charisword" target="_blank">@charisword</a> &bull;
-                Twitter/X: <a href="https://twitter.com/ChariswordM" target="_blank">@ChariswordM</a>
-            </div>
-            <div class="payment">
-                <strong>GIVING & SUPPORT</strong><br>
-                MTN MOMO: <b>0248645966</b> &bull; TELECEL CASH: <b>364097</b><br>
-                Fidelity Bank: <b>1050052233116</b> &bull; Stanbic Bank: <b>9040011571950</b><br>
-                Email: <a href="mailto:chariswordgh@gmail.com">chariswordgh@gmail.com</a>
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Contact Information -->
+                    <div class="footer-section">
+                        <h3 class="text-[#f58502] font-bold mb-3">
+                            <i class="fas fa-phone-alt mr-2"></i>CONNECT WITH US
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <p><i class="fas fa-phone mr-2"></i>Call or Message: <a href="tel:0261169859" class="text-[#f58502] hover:underline">026 116 9859</a></p>
+                            <p><i class="fas fa-map-marker-alt mr-2"></i>Location: Lashibi, Transformer Junction</p>
+                            <p class="text-xs opacity-70 ml-6">(Sakumono to Ashaiman Highway)</p>
+                            <p><i class="fas fa-map mr-2"></i>Digital Address: GT-337-6599</p>
+                            <p><i class="fas fa-search mr-2"></i>Google Maps: Search "Charisword Gospel Ministry"</p>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="footer-section">
+                        <h3 class="text-[#f58502] font-bold mb-3">
+                            <i class="fas fa-share-alt mr-2"></i>SOCIAL MEDIA
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <p><i class="fab fa-facebook mr-2"></i><a href="https://facebook.com/chariswordgospelministry" target="_blank" class="text-[#f58502] hover:underline">Charisword Gospel Ministry</a></p>
+                            <p><i class="fab fa-instagram mr-2"></i><a href="https://instagram.com/charisword" target="_blank" class="text-[#f58502] hover:underline">@charisword</a></p>
+                            <p><i class="fab fa-tiktok mr-2"></i><a href="https://tiktok.com/@charisword" target="_blank" class="text-[#f58502] hover:underline">@charisword</a></p>
+                            <p><i class="fab fa-twitter mr-2"></i><a href="https://twitter.com/ChariswordM" target="_blank" class="text-[#f58502] hover:underline">@ChariswordM</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Giving & Support -->
+                    <div class="footer-section">
+                        <h3 class="text-[#f58502] font-bold mb-3">
+                            <i class="fas fa-heart mr-2"></i>GIVING & SUPPORT
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <p><i class="fas fa-mobile-alt mr-2"></i>MTN MOMO: <span class="font-bold">0248645966</span></p>
+                            <p><i class="fas fa-credit-card mr-2"></i>TELECEL CASH: <span class="font-bold">364097</span></p>
+                            <p><i class="fas fa-university mr-2"></i>FIDELITY BANK: <span class="font-bold">1050052233116</span></p>
+                            <p><i class="fas fa-university mr-2"></i>STANBIC BANK: <span class="font-bold">9040011571950</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Contact & Email -->
+                    <div class="footer-section">
+                        <h3 class="text-[#f58502] font-bold mb-3">
+                            <i class="fas fa-envelope mr-2"></i>CONTACT US
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <p><i class="fas fa-envelope mr-2"></i><a href="mailto:chariswordgh@gmail.com" class="text-[#f58502] hover:underline">chariswordgh@gmail.com</a></p>
+                            <p><i class="fas fa-globe mr-2"></i>Website: <a href="#" class="text-[#f58502] hover:underline">charisword.org</a></p>
+                            <p><i class="fas fa-pray mr-2"></i>Prayer Requests</p>
+                            <p><i class="fas fa-hands-helping mr-2"></i>Volunteer Opportunities</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copyright -->
+                <div class="mt-8 pt-6 border-t border-[#3a1d09] border-opacity-20 text-center">
+                    <p class="text-sm opacity-80">
+                        © <?php echo e(date('Y')); ?> Charisword Gospel Ministry. All rights reserved. 
+                        <span class="text-[#f58502] font-semibold">Raising Able Ministers of Grace</span>
+                    </p>
+                </div>
             </div>
         </div>
     </body>
-</html>
-<?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/layouts/guest.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/layouts/guest.blade.php ENDPATH**/ ?>

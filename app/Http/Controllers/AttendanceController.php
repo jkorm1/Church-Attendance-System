@@ -68,6 +68,19 @@ class AttendanceController extends Controller
                 ->whereNotNull('first_timer_id')
                 ->pluck('present', 'first_timer_id');
 
+            // Automatically create attendance records for first timers who don't have one yet
+            foreach ($firstTimers as $firstTimer) {
+                if (!isset($firstTimerAttendance[$firstTimer->id])) {
+                    // Auto-mark first timers as present
+                    Attendance::create([
+                        'service_id' => $service_id,
+                        'first_timer_id' => $firstTimer->id,
+                        'present' => true, // Auto-mark as present
+                    ]);
+                    $firstTimerAttendance[$firstTimer->id] = true;
+                }
+            }
+
             return view('attendance.index', compact('service', 'members', 'memberAttendance', 'firstTimers', 'firstTimerAttendance'));
         } catch (\Exception $e) {
             return back()->with('error', 'Error loading attendance: ' . $e->getMessage());
@@ -256,6 +269,16 @@ class AttendanceController extends Controller
         try {
             DB::beginTransaction();
             
+            // Get service date
+            $serviceDate = null;
+            if (str_starts_with($service_id, 'auto_')) {
+                $service = $this->serviceGenerator->parseServiceId($service_id);
+                $serviceDate = $service['service_date'] ?? date('Y-m-d');
+            } else {
+                $service = Service::findOrFail($service_id);
+                $serviceDate = $service->service_date ?? date('Y-m-d');
+            }
+            
             // Get members based on user's role
             if ($user->isAdmin()) {
                 $members = Member::pluck('id');
@@ -269,10 +292,16 @@ class AttendanceController extends Controller
                 $members = collect([]);
             }
             
-            $marked = Attendance::where('service_id', $service_id)->pluck('member_id');
-            $absent = $members->diff($marked);
+            // Get first timers for this service date
+            $firstTimers = FirstTimer::whereDate('first_visit_date', $serviceDate)->pluck('id');
             
-            foreach ($absent as $member_id) {
+            // Mark unmarked members as absent
+            $markedMembers = Attendance::where('service_id', $service_id)
+                                     ->whereNotNull('member_id')
+                                     ->pluck('member_id');
+            $absentMembers = $members->diff($markedMembers);
+            
+            foreach ($absentMembers as $member_id) {
                 Attendance::create([
                     'service_id' => $service_id,
                     'member_id' => $member_id,
@@ -280,8 +309,22 @@ class AttendanceController extends Controller
                 ]);
             }
             
+            // Ensure all first timers are marked as present
+            $markedFirstTimers = Attendance::where('service_id', $service_id)
+                                         ->whereNotNull('first_timer_id')
+                                         ->pluck('first_timer_id');
+            $unmarkedFirstTimers = $firstTimers->diff($markedFirstTimers);
+            
+            foreach ($unmarkedFirstTimers as $first_timer_id) {
+                Attendance::create([
+                    'service_id' => $service_id,
+                    'first_timer_id' => $first_timer_id,
+                    'present' => true, // Auto-mark first timers as present
+                ]);
+            }
+            
             DB::commit();
-            return back()->with('success', 'Attendance finalized! All unmarked members marked as absent.');
+            return back()->with('success', 'Attendance finalized! All unmarked members marked as absent. First timers automatically marked as present.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error finalizing attendance: ' . $e->getMessage());
@@ -293,18 +336,37 @@ class AttendanceController extends Controller
     {
         try {
             $totalMembers = Member::count();
-            $presentCount = Attendance::where('service_id', $service_id)
-                                    ->where('present', true)
-                                    ->count();
-            $absentCount = Attendance::where('service_id', $service_id)
-                                   ->where('present', false)
-                                   ->count();
-            $unmarkedCount = $totalMembers - $presentCount - $absentCount;
+            $totalFirstTimers = FirstTimer::whereDate('first_visit_date', date('Y-m-d'))->count();
+            $totalAttendees = $totalMembers + $totalFirstTimers;
             
-            $attendanceRate = $totalMembers > 0 ? round(($presentCount / $totalMembers) * 100, 2) : 0;
+            $memberPresentCount = Attendance::where('service_id', $service_id)
+                                          ->whereNotNull('member_id')
+                                          ->where('present', true)
+                                          ->count();
+            $firstTimerPresentCount = Attendance::where('service_id', $service_id)
+                                              ->whereNotNull('first_timer_id')
+                                              ->where('present', true)
+                                              ->count();
+            $presentCount = $memberPresentCount + $firstTimerPresentCount;
+            
+            $memberAbsentCount = Attendance::where('service_id', $service_id)
+                                         ->whereNotNull('member_id')
+                                         ->where('present', false)
+                                         ->count();
+            $firstTimerAbsentCount = Attendance::where('service_id', $service_id)
+                                             ->whereNotNull('first_timer_id')
+                                             ->where('present', false)
+                                             ->count();
+            $absentCount = $memberAbsentCount + $firstTimerAbsentCount;
+            
+            $unmarkedCount = $totalMembers - $memberPresentCount - $memberAbsentCount;
+            
+            $attendanceRate = $totalAttendees > 0 ? round(($presentCount / $totalAttendees) * 100, 2) : 0;
             
             return response()->json([
                 'total_members' => $totalMembers,
+                'total_first_timers' => $totalFirstTimers,
+                'total_attendees' => $totalAttendees,
                 'present' => $presentCount,
                 'absent' => $absentCount,
                 'unmarked' => $unmarkedCount,
@@ -330,15 +392,30 @@ class AttendanceController extends Controller
                 $service = Service::findOrFail($service_id);
             }
 
-            $attendance = Attendance::where('service_id', $service_id)
-                                  ->with('member')
-                                  ->get();
+            $memberAttendance = Attendance::where('service_id', $service_id)
+                                        ->whereNotNull('member_id')
+                                        ->with('member')
+                                        ->get();
+
+            $firstTimerAttendance = Attendance::where('service_id', $service_id)
+                                            ->whereNotNull('first_timer_id')
+                                            ->with('firstTimer')
+                                            ->get();
 
             // Generate CSV content
-            $csv = "Member Name,Status\n";
-            foreach ($attendance as $record) {
+            $csv = "Name,Type,Status\n";
+            
+            // Add member attendance
+            foreach ($memberAttendance as $record) {
                 $status = $record->present ? 'Present' : 'Absent';
-                $csv .= "\"{$record->member->name}\",{$status}\n";
+                $csv .= "\"{$record->member->name}\",Member,{$status}\n";
+            }
+            
+            // Add first timer attendance
+            foreach ($firstTimerAttendance as $record) {
+                $status = $record->present ? 'Present (Auto)' : 'Absent';
+                $type = $record->firstTimer->purpose === 'stay' ? 'Member' : 'First Timer';
+                $csv .= "\"{$record->firstTimer->name}\",{$type},{$status}\n";
             }
 
             $filename = "attendance_{$service_id}_" . date('Y-m-d_H-i-s') . ".csv";

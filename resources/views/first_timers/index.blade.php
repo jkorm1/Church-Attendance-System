@@ -1,119 +1,283 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto py-6 max-w-7xl">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold">First Timers &amp; Follow-Up Department</h1>
-        <a href="{{ route('first_timers.create') }}" class="bg-orange-500 text-white px-4 py-2 rounded border border-orange-700 shadow-sm hover:bg-orange-600">Register First Timer</a>
+<div class="space-y-6">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-gradient mb-2">
+                <i class="fas fa-user-plus mr-3"></i>First Timers & Follow-Up Department
+            </h1>
+            <p class="text-[#3a1d09] font-medium">Welcome and track new visitors to Charisword Gospel Ministry</p>
+        </div>
+        <a href="{{ route('first_timers.create') }}" class="btn-primary">
+            <i class="fas fa-user-plus mr-2"></i>Register First Timer
+        </a>
     </div>
 
-    {{-- Filter Form --}}
-    <form method="GET" class="mb-6 flex flex-wrap gap-4 items-end">
-        <div>
-            <label for="service_id" class="block text-sm font-medium text-gray-700">Filter by Service</label>
-            <select name="service_id" id="service_id" class="mt-1 block w-56 border-gray-300 rounded shadow-sm">
-                <option value="">-- All Services --</option>
-                @php
-                    $serviceGenerator = app(\App\Services\ServiceGeneratorService::class);
-                    $autoServices = collect($serviceGenerator->getAllServices(7));
-                    $manualServices = \App\Models\Service::orderBy('service_date', 'desc')->get();
-                    $allServices = $autoServices->merge($manualServices)->sortBy('service_date');
-                @endphp
-                @foreach($allServices as $service)
-                    <option value="{{ $service['id'] ?? $service->id }}" @if(request('service_id') == ($service['id'] ?? $service->id)) selected @endif>
-                        {{ $service['name'] ?? $service->name }} ({{ \Carbon\Carbon::parse($service['service_date'] ?? $service->service_date)->format('D, d M Y') }})
-                        @if(isset($service['is_auto_generated']) && $service['is_auto_generated'])
-                            (Auto)
-                        @endif
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <label for="date" class="block text-sm font-medium text-gray-700">Or by Date</label>
-            <input type="date" name="date" id="date" value="{{ request('date') }}" class="mt-1 block w-48 border-gray-300 rounded shadow-sm">
-        </div>
-        <div>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded border border-blue-700 shadow-sm hover:bg-blue-700">Filter</button>
-            <a href="{{ route('first_timers.index') }}" class="ml-2 text-sm text-gray-600 underline">Reset</a>
-        </div>
-    </form>
-
-    {{-- Summary Section --}}
-    <div class="mb-6 p-4 bg-gray-50 rounded shadow">
-        <div class="flex flex-wrap gap-8 items-center">
-            <div>
-                <div class="text-lg font-bold">Grand Total = {{ $total }}</div>
-                <div class="text-green-700 font-semibold">Total Stay - {{ $stay }}</div>
-                <div class="text-blue-700 font-semibold">Total Visit - {{ $visit }}</div>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="stats-card">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-users text-white text-xl"></i>
+                </div>
             </div>
-            @if($service)
-                <div>
-                    <div class="font-semibold">For: {{ is_array($service) ? $service['name'] : $service->name }}</div>
-                    <div class="text-sm text-gray-600">{{ \Carbon\Carbon::parse(is_array($service) ? $service['service_date'] : $service->service_date)->format('D, d M Y') }}</div>
+            <div class="stats-number">{{ $total }}</div>
+            <div class="stats-label">Grand Total</div>
+        </div>
+
+        <div class="stats-card">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-home text-white text-xl"></i>
                 </div>
-            @elseif($date)
-                <div>
-                    <div class="font-semibold">For: {{ \Carbon\Carbon::parse($date)->format('D, d M Y') }}</div>
+            </div>
+            <div class="stats-number">{{ $stay }}</div>
+            <div class="stats-label">Total Stay</div>
+        </div>
+
+        <div class="stats-card">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-calendar-check text-white text-xl"></i>
                 </div>
-            @endif
+            </div>
+            <div class="stats-number">{{ $visit }}</div>
+            <div class="stats-label">Total Visit</div>
+        </div>
+
+        <div class="stats-card">
+            <div class="flex items-center justify-center mb-4">
+                <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-chart-line text-white text-xl"></i>
+                </div>
+            </div>
+            <div class="stats-number">{{ $firstTimers->count() }}</div>
+            <div class="stats-label">Current View</div>
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-            {{ session('success') }}
+    <!-- Filter Section -->
+    <div class="glass-card p-6">
+        <h3 class="text-lg font-bold text-[#3a1d09] mb-4">
+            <i class="fas fa-filter mr-2"></i>Filter Records
+        </h3>
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div class="form-group">
+                <label for="service_id" class="form-label">Filter by Service</label>
+                <select name="service_id" id="service_id" class="form-input">
+                    <option value="">-- All Services --</option>
+                    @php
+                        $serviceGenerator = app(\App\Services\ServiceGeneratorService::class);
+                        $autoServices = collect($serviceGenerator->getAllServices(7));
+                        $manualServices = \App\Models\Service::orderBy('service_date', 'desc')->get();
+                        $allServices = $autoServices->merge($manualServices)->sortBy('service_date');
+                    @endphp
+                    @foreach($allServices as $service)
+                        <option value="{{ $service['id'] ?? $service->id }}" @if(request('service_id') == ($service['id'] ?? $service->id)) selected @endif>
+                            {{ $service['name'] ?? $service->name }} ({{ \Carbon\Carbon::parse($service['service_date'] ?? $service->service_date)->format('D, d M Y') }})
+                            @if(isset($service['is_auto_generated']) && $service['is_auto_generated'])
+                                (Auto)
+                            @endif
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date" class="form-label">Or by Date</label>
+                <input type="date" name="date" id="date" value="{{ request('date') }}" class="form-input">
+            </div>
+            <div class="flex gap-2">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-search mr-2"></i>Filter
+                </button>
+                <a href="{{ route('first_timers.index') }}" class="btn-secondary">
+                    <i class="fas fa-refresh mr-2"></i>Reset
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Current Filter Info -->
+    @if($service || $date)
+        <div class="glass-card p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-lg font-bold text-[#3a1d09] mb-2">Current Filter</h4>
+                    @if($service)
+                        <p class="text-[#f58502] font-semibold">
+                            <i class="fas fa-church mr-2"></i>
+                            {{ is_array($service) ? $service['name'] : $service->name }}
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            {{ \Carbon\Carbon::parse(is_array($service) ? $service['service_date'] : $service->service_date)->format('D, d M Y') }}
+                        </p>
+                    @elseif($date)
+                        <p class="text-[#f58502] font-semibold">
+                            <i class="fas fa-calendar mr-2"></i>
+                            {{ \Carbon\Carbon::parse($date)->format('D, d M Y') }}
+                        </p>
+                    @endif
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold text-[#f58502]">{{ $firstTimers->count() }}</div>
+                    <div class="text-sm text-gray-600">Records Found</div>
+                </div>
+            </div>
         </div>
     @endif
-    <div class="overflow-x-auto font-montserrat">
-        <table class="min-w-full bg-white border border-[#3a1d09] rounded-lg shadow">
-            <thead class="bg-[#f58502]">
-                <tr>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Name</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Date of Birth</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Contact</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Residence</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Purpose</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Service</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Invited By</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Cell</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Fold</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">First Visit</th>
-                    <th class="px-4 py-2 border text-[#3a1d09] font-bold">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-orange-100">
-                @foreach($firstTimers as $ft)
-                <tr>
-                    <td class="px-4 py-2 border">{{ $ft->name }}</td>
-                    <td class="px-4 py-2 border">{{ $ft->date_of_birth ?? 'N/A' }}</td>
-                    <td class="px-4 py-2 border">{{ $ft->phone }}</td>
-                    <td class="px-4 py-2 border">{{ $ft->residence ?? 'N/A' }}</td>
-                    <td class="px-4 py-2 border">
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $ft->purpose == 'stay' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
-                            {{ ucfirst($ft->purpose ?? 'visit') }}
-                        </span>
-                    </td>
-                    <td class="px-4 py-2 border">{{ $ft->service_name }}</td>
-                    <td class="px-4 py-2 border">{{ $ft->inviter->name ?? 'N/A' }}</td>
-                    <td class="px-4 py-2 border">{{ $ft->cell->name ?? 'N/A' }}</td>
-                    <td class="px-4 py-2 border">{{ $ft->fold->name ?? 'N/A' }}</td>
-                    <td class="px-4 py-2 border">{{ $ft->first_visit_date }}</td>
-                    <td class="px-4 py-2 border">
-                        <form action="{{ route('first_timers.promote', $ft->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded border border-green-700 shadow-sm hover:bg-green-600 mb-2">Promote to Member</button>
-                        </form>
-                        <form action="{{ route('first_timers.destroy', $ft->id) }}" method="POST" onsubmit="return confirm('Delete this first timer?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded border border-red-700 shadow-sm hover:bg-red-600">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+
+    <!-- Success Message -->
+    @if(session('success'))
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+        </div>
+    @endif
+
+    <!-- First Timers Table -->
+    <div class="glass-card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="table-modern w-full">
+                <thead>
+                    <tr>
+                        <th class="text-left">
+                            <i class="fas fa-user mr-2"></i>Name
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-birthday-cake mr-2"></i>Date of Birth
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-phone mr-2"></i>Contact
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-map-marker-alt mr-2"></i>Residence
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-flag mr-2"></i>Purpose
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-church mr-2"></i>Service
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-user-friends mr-2"></i>Invited By
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-home mr-2"></i>Cell
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-layer-group mr-2"></i>Fold
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-calendar mr-2"></i>First Visit
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-cogs mr-2"></i>Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($firstTimers as $ft)
+                    <tr class="hover:bg-orange-50 transition-colors duration-200">
+                        <td class="font-semibold text-[#3a1d09]">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-gradient-to-r from-[#f58502] to-[#ff9a2e] rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                    {{ strtoupper(substr($ft->name, 0, 1)) }}
+                                </div>
+                                {{ $ft->name }}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-sm text-gray-600">
+                                {{ $ft->date_of_birth ? \Carbon\Carbon::parse($ft->date_of_birth)->format('M j, Y') : 'N/A' }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="tel:{{ $ft->phone }}" class="text-[#f58502] hover:text-[#3a1d09] transition-colors">
+                                <i class="fas fa-phone mr-1"></i>{{ $ft->phone }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="text-sm text-gray-600">{{ $ft->residence ?? 'N/A' }}</span>
+                        </td>
+                        <td>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $ft->purpose == 'stay' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                                <i class="fas {{ $ft->purpose == 'stay' ? 'fa-home' : 'fa-calendar-check' }} mr-1"></i>
+                                {{ ucfirst($ft->purpose ?? 'visit') }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-sm text-gray-600">{{ $ft->service_name }}</span>
+                        </td>
+                        <td>
+                            @if($ft->inviter)
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
+                                        {{ strtoupper(substr($ft->inviter->name, 0, 1)) }}
+                                    </div>
+                                    <span class="text-sm">{{ $ft->inviter->name }}</span>
+                                </div>
+                            @else
+                                <span class="text-gray-400 text-sm">-</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($ft->cell)
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">
+                                    {{ $ft->cell->name }}
+                                </span>
+                            @else
+                                <span class="text-gray-400 text-sm">-</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($ft->fold)
+                                <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">
+                                    {{ $ft->fold->name }}
+                                </span>
+                            @else
+                                <span class="text-gray-400 text-sm">-</span>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="text-sm text-gray-600">
+                                {{ $ft->first_visit_date ? \Carbon\Carbon::parse($ft->first_visit_date)->format('M j, Y') : 'N/A' }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="flex items-center gap-2">
+                                <form action="{{ route('first_timers.promote', $ft->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-green-600 hover:text-green-800 transition-colors" title="Promote to Member">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                </form>
+                                <a href="#" class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('first_timers.destroy', $ft->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800 transition-colors" title="Delete" onclick="return confirm('Are you sure you want to delete this first timer?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <!-- Pagination -->
+    @if($firstTimers->hasPages())
+        <div class="flex justify-center">
+            <div class="glass-card p-4">
+                {{ $firstTimers->links() }}
+            </div>
+        </div>
+    @endif
 </div>
 @endsection 
