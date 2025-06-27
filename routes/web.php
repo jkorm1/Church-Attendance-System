@@ -8,6 +8,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\FoldController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Cell;
+use App\Http\Controllers\AttendanceReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,10 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard/folds/{id}', [\App\Http\Controllers\DashboardController::class, 'foldDetail'])->name('dashboard.folds.detail');
     Route::get('dashboard/members/{id}', [\App\Http\Controllers\DashboardController::class, 'memberDetail'])->name('dashboard.members.detail');
     Route::get('dashboard/analytics', [\App\Http\Controllers\DashboardController::class, 'analytics'])->name('dashboard.analytics');
+
+    // Attendance Report routes
+    Route::get('/attendance-report', [AttendanceReportController::class, 'index'])->name('attendance.report');
+    Route::get('/attendance-report/show', [AttendanceReportController::class, 'show'])->name('attendance.report.show');
 });
 
 Route::middleware('auth')->get('/api/cells/{cell}/folds', function (Cell $cell) {
