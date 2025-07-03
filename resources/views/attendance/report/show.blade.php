@@ -30,17 +30,6 @@
             </thead>
             <tbody>
                 @if($filter == 'all')
-                    @foreach($memberRecords as $record)
-                        <tr class="border-b">
-                            <td class="px-4 py-2">{{ $record->member->name ?? '-' }}</td>
-                            <td class="px-4 py-2">{{ $record->member->date_of_birth ?? '-' }}</td>
-                            <td class="px-4 py-2">{{ $record->member->phone ?? '-' }}</td>
-                            <td class="px-4 py-2">{{ $record->member->residence ?? '-' }}</td>
-                            <td class="px-4 py-2">-</td>
-                            <td class="px-4 py-2">-</td>
-                            <td class="px-4 py-2">{{ $record->present ? 'Present' : 'Absent' }}</td>
-                        </tr>
-                    @endforeach
                     @foreach($firstTimerRecords as $record)
                         <tr class="border-b bg-purple-50">
                             <td class="px-4 py-2">{{ $record->firstTimer->name ?? '-' }}</td>
@@ -49,6 +38,17 @@
                             <td class="px-4 py-2">{{ $record->firstTimer->residence ?? '-' }}</td>
                             <td class="px-4 py-2">{{ ucfirst($record->firstTimer->purpose ?? '-') }}</td>
                             <td class="px-4 py-2">{{ $record->firstTimer->invited_by ? ($record->firstTimer->inviter->name ?? '-') : '-' }}</td>
+                            <td class="px-4 py-2">{{ $record->present ? 'Present' : 'Absent' }}</td>
+                        </tr>
+                    @endforeach
+                    @foreach($memberRecords as $record)
+                        <tr class="border-b">
+                            <td class="px-4 py-2">{{ $record->member->name ?? '-' }}</td>
+                            <td class="px-4 py-2">{{ $record->member->date_of_birth ?? '-' }}</td>
+                            <td class="px-4 py-2">{{ $record->member->phone ?? '-' }}</td>
+                            <td class="px-4 py-2">{{ $record->member->residence ?? '-' }}</td>
+                            <td class="px-4 py-2">-</td>
+                            <td class="px-4 py-2">-</td>
                             <td class="px-4 py-2">{{ $record->present ? 'Present' : 'Absent' }}</td>
                         </tr>
                     @endforeach

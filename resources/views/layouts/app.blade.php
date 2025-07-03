@@ -51,6 +51,10 @@
                             <i class="fas fa-calendar-alt text-lg"></i>
                             <span class="font-semibold">Services</span>
                         </a>
+                        <a href="{{ route('attendance.report') }}" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 @if(request()->routeIs('attendance.report')) active-glow @endif">
+                            <i class="fas fa-chart-bar text-lg"></i>
+                            <span class="font-semibold">Report</span>
+                        </a>
                         <a href="{{ route('profile.edit') }}" class="flex items-center gap-4 py-3 px-4 transition-all duration-200 @if(request()->routeIs('profile.edit')) active-glow @endif">
                             <i class="fas fa-user-circle text-lg"></i>
                             <span class="font-semibold">Profile</span>
@@ -187,6 +191,10 @@
                     <a href="{{ route('services.index') }}" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Services</span>
+                    </a>
+                    <a href="{{ route('attendance.report') }}" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Report</span>
                     </a>
                     <a href="{{ route('profile.edit') }}" class="flex items-center gap-4 py-3 px-4 text-white hover:bg-[#f58502] rounded-lg transition-all duration-200">
                         <i class="fas fa-user-circle"></i>

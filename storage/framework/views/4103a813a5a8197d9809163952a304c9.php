@@ -30,17 +30,6 @@
             </thead>
             <tbody>
                 <?php if($filter == 'all'): ?>
-                    <?php $__currentLoopData = $memberRecords; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $record): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr class="border-b">
-                            <td class="px-4 py-2"><?php echo e($record->member->name ?? '-'); ?></td>
-                            <td class="px-4 py-2"><?php echo e($record->member->date_of_birth ?? '-'); ?></td>
-                            <td class="px-4 py-2"><?php echo e($record->member->phone ?? '-'); ?></td>
-                            <td class="px-4 py-2"><?php echo e($record->member->residence ?? '-'); ?></td>
-                            <td class="px-4 py-2">-</td>
-                            <td class="px-4 py-2">-</td>
-                            <td class="px-4 py-2"><?php echo e($record->present ? 'Present' : 'Absent'); ?></td>
-                        </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <?php $__currentLoopData = $firstTimerRecords; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $record): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr class="border-b bg-purple-50">
                             <td class="px-4 py-2"><?php echo e($record->firstTimer->name ?? '-'); ?></td>
@@ -49,6 +38,17 @@
                             <td class="px-4 py-2"><?php echo e($record->firstTimer->residence ?? '-'); ?></td>
                             <td class="px-4 py-2"><?php echo e(ucfirst($record->firstTimer->purpose ?? '-')); ?></td>
                             <td class="px-4 py-2"><?php echo e($record->firstTimer->invited_by ? ($record->firstTimer->inviter->name ?? '-') : '-'); ?></td>
+                            <td class="px-4 py-2"><?php echo e($record->present ? 'Present' : 'Absent'); ?></td>
+                        </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $memberRecords; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $record): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr class="border-b">
+                            <td class="px-4 py-2"><?php echo e($record->member->name ?? '-'); ?></td>
+                            <td class="px-4 py-2"><?php echo e($record->member->date_of_birth ?? '-'); ?></td>
+                            <td class="px-4 py-2"><?php echo e($record->member->phone ?? '-'); ?></td>
+                            <td class="px-4 py-2"><?php echo e($record->member->residence ?? '-'); ?></td>
+                            <td class="px-4 py-2">-</td>
+                            <td class="px-4 py-2">-</td>
                             <td class="px-4 py-2"><?php echo e($record->present ? 'Present' : 'Absent'); ?></td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

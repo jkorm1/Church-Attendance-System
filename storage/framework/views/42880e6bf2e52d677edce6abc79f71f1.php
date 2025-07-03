@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container mx-auto py-8">
     <h1 class="text-3xl font-bold mb-6 text-[#3a1d09]">Attendance Report</h1>

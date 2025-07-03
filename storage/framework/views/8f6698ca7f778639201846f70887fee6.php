@@ -116,6 +116,12 @@
                             <i class="fas fa-star mr-2"></i>Leader Role
                         </th>
                         <th class="text-left">
+                            <i class="fas fa-user-friends mr-2"></i>Invitees
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-seedling mr-2"></i>Planters
+                        </th>
+                        <th class="text-left">
                             <i class="fas fa-cogs mr-2"></i>Actions
                         </th>
                     </tr>
@@ -197,6 +203,14 @@
                             <?php else: ?>
                                 <span class="text-gray-400 text-sm">-</span>
                             <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php echo e($member->invitees_count); ?>
+
+                        </td>
+                        <td>
+                            <?php echo e($member->planters_count); ?>
+
                         </td>
                         <td>
                             <div class="flex items-center gap-2">

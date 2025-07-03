@@ -66,17 +66,16 @@
                 <label for="service_id" class="form-label">Filter by Service</label>
                 <select name="service_id" id="service_id" class="form-input">
                     <option value="">-- All Services --</option>
-                    <?php
-                        $serviceGenerator = app(\App\Services\ServiceGeneratorService::class);
-                        $autoServices = collect($serviceGenerator->getAllServices(7));
-                        $manualServices = \App\Models\Service::orderBy('service_date', 'desc')->get();
-                        $allServices = $autoServices->merge($manualServices)->sortBy('service_date');
-                    ?>
                     <?php $__currentLoopData = $allServices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $service): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($service['id'] ?? $service->id); ?>" <?php if(request('service_id') == ($service['id'] ?? $service->id)): ?> selected <?php endif; ?>>
-                            <?php echo e($service['name'] ?? $service->name); ?> (<?php echo e(\Carbon\Carbon::parse($service['service_date'] ?? $service->service_date)->format('D, d M Y')); ?>)
-                            <?php if(isset($service['is_auto_generated']) && $service['is_auto_generated']): ?>
-                                (Auto)
+                        <option value="<?php echo e($service->id); ?>" <?php if(request('service_id') == $service->id): ?> selected <?php endif; ?>>
+                            <?php if(!empty($service->is_auto) && $service->is_auto): ?>
+                                <?php
+                                    preg_match('/(\\d{4}-\\d{2}-\\d{2})/', $service->service_date, $matches);
+                                    $date = $matches[1] ?? $service->service_date;
+                                ?>
+                                Auto Service (<?php echo e(\Carbon\Carbon::parse($date)->format('D, d M Y')); ?>)
+                            <?php else: ?>
+                                <?php echo e($service->name); ?> (<?php echo e(\Carbon\Carbon::parse($service->service_date)->format('D, d M Y')); ?>)
                             <?php endif; ?>
                         </option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -98,19 +97,19 @@
     </div>
 
     <!-- Current Filter Info -->
-    <?php if($service || $date): ?>
+    <?php if($serviceInfo || $date): ?>
         <div class="glass-card p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
             <div class="flex items-center justify-between">
                 <div>
                     <h4 class="text-lg font-bold text-[#3a1d09] mb-2">Current Filter</h4>
-                    <?php if($service): ?>
+                    <?php if($serviceInfo): ?>
                         <p class="text-[#f58502] font-semibold">
                             <i class="fas fa-church mr-2"></i>
-                            <?php echo e(is_array($service) ? $service['name'] : $service->name); ?>
+                            <?php echo e($serviceInfo['name']); ?>
 
                         </p>
                         <p class="text-sm text-gray-600">
-                            <?php echo e(\Carbon\Carbon::parse(is_array($service) ? $service['service_date'] : $service->service_date)->format('D, d M Y')); ?>
+                            <?php echo e(\Carbon\Carbon::parse($serviceInfo['service_date'])->format('D, d M Y')); ?>
 
                         </p>
                     <?php elseif($date): ?>

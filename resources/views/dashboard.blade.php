@@ -231,4 +231,78 @@
             <p class="text-lg opacity-90">Charisword Gospel Ministry</p>
         </div>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-user-friends mr-2"></i>Best Inviters</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                @foreach($topInviters->take(5) as $member)
+                    <li class="flex justify-between items-center">
+                        <span>{{ $member->name }}</span>
+                        <span class="font-bold text-blue-700">{{ $member->invitees_count }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-seedling mr-2"></i>Best Planters</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                @foreach($topPlanters->take(5) as $member)
+                    <li class="flex justify-between items-center">
+                        <span>{{ $member->name }}</span>
+                        <span class="font-bold text-green-700">{{ $member->planters_count }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-user-friends mr-2"></i>Best Inviters by Cell</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                @foreach($topInvitersByCell as $row)
+                    <li class="flex justify-between items-center">
+                        <span><strong>{{ $row['cell'] }}</strong>: {{ $row['member'] }}</span>
+                        <span class="font-bold text-blue-700">{{ $row['count'] }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-seedling mr-2"></i>Best Planters by Cell</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                @foreach($topPlantersByCell as $row)
+                    <li class="flex justify-between items-center">
+                        <span><strong>{{ $row['cell'] }}</strong>: {{ $row['member'] }}</span>
+                        <span class="font-bold text-green-700">{{ $row['count'] }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-user-friends mr-2"></i>Best Inviters by Fold</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                @foreach($topInvitersByFold as $row)
+                    <li class="flex justify-between items-center">
+                        <span><strong>{{ $row['fold'] }}</strong>: {{ $row['member'] }}</span>
+                        <span class="font-bold text-blue-700">{{ $row['count'] }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-seedling mr-2"></i>Best Planters by Fold</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                @foreach($topPlantersByFold as $row)
+                    <li class="flex justify-between items-center">
+                        <span><strong>{{ $row['fold'] }}</strong>: {{ $row['member'] }}</span>
+                        <span class="font-bold text-green-700">{{ $row['count'] }}</span>
+                    </li>
+                @endforeach
+            </ol>
+        </div>
+    </div>
 @endsection

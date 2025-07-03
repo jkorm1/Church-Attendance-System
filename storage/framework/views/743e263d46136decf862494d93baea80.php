@@ -229,6 +229,80 @@
             <p class="text-lg opacity-90">Charisword Gospel Ministry</p>
         </div>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-user-friends mr-2"></i>Best Inviters</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                <?php $__currentLoopData = $topInviters->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $member): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li class="flex justify-between items-center">
+                        <span><?php echo e($member->name); ?></span>
+                        <span class="font-bold text-blue-700"><?php echo e($member->invitees_count); ?></span>
+                    </li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ol>
+        </div>
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-seedling mr-2"></i>Best Planters</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                <?php $__currentLoopData = $topPlanters->take(5); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $member): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li class="flex justify-between items-center">
+                        <span><?php echo e($member->name); ?></span>
+                        <span class="font-bold text-green-700"><?php echo e($member->planters_count); ?></span>
+                    </li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ol>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-user-friends mr-2"></i>Best Inviters by Cell</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                <?php $__currentLoopData = $topInvitersByCell; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li class="flex justify-between items-center">
+                        <span><strong><?php echo e($row['cell']); ?></strong>: <?php echo e($row['member']); ?></span>
+                        <span class="font-bold text-blue-700"><?php echo e($row['count']); ?></span>
+                    </li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ol>
+        </div>
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-seedling mr-2"></i>Best Planters by Cell</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                <?php $__currentLoopData = $topPlantersByCell; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li class="flex justify-between items-center">
+                        <span><strong><?php echo e($row['cell']); ?></strong>: <?php echo e($row['member']); ?></span>
+                        <span class="font-bold text-green-700"><?php echo e($row['count']); ?></span>
+                    </li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ol>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-user-friends mr-2"></i>Best Inviters by Fold</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                <?php $__currentLoopData = $topInvitersByFold; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li class="flex justify-between items-center">
+                        <span><strong><?php echo e($row['fold']); ?></strong>: <?php echo e($row['member']); ?></span>
+                        <span class="font-bold text-blue-700"><?php echo e($row['count']); ?></span>
+                    </li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ol>
+        </div>
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-[#3a1d09] mb-4 flex items-center"><i class="fas fa-seedling mr-2"></i>Best Planters by Fold</h3>
+            <ol class="list-decimal pl-6 space-y-2">
+                <?php $__currentLoopData = $topPlantersByFold; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li class="flex justify-between items-center">
+                        <span><strong><?php echo e($row['fold']); ?></strong>: <?php echo e($row['member']); ?></span>
+                        <span class="font-bold text-green-700"><?php echo e($row['count']); ?></span>
+                    </li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ol>
+        </div>
+    </div>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Joseph Korm\Desktop\Church attendance sytem\cw_attendance\AEMS\resources\views/dashboard.blade.php ENDPATH**/ ?>

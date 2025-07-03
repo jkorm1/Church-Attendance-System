@@ -19,7 +19,7 @@
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
-                background-attachment: ;
+
                 position: relative;
             }
             
@@ -64,29 +64,14 @@
                             </div>
                         </div>
                         <h1 class="auth-welcome">Welcome to Charisword Gospel Ministry</h1>
-                        <p class="auth-tagline">Raising Able Ministers of Grace • Transforming Lives</p>
+                        <p class="auth-tagline">Raising Able Ministers of Grace World Wide</p>
                     </div>
 
                     <!-- Auth Content -->
                     <?php echo e($slot); ?>
 
 
-                    <!-- Ministry Information -->
-                    <div class="mt-8 p-6 bg-gradient-to-r from-[#f58502] to-[#ff9a2e] rounded-2xl text-white">
-                        <h3 class="text-lg font-bold mb-4 text-center">
-                            <i class="fas fa-church mr-2"></i>Join Our Ministry
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <p><i class="fas fa-phone mr-2"></i>Call: <a href="tel:0261169859" class="underline">026 116 9859</a></p>
-                                <p><i class="fas fa-map-marker-alt mr-2"></i>Lashibi, Transformer Junction</p>
-                            </div>
-                            <div>
-                                <p><i class="fab fa-facebook mr-2"></i>@charisword</p>
-                                <p><i class="fab fa-instagram mr-2"></i>@charisword</p>
-                            </div>
-                        </div>
-                    </div>
+                  
                 </div>
             </div>
 
@@ -146,7 +131,7 @@
                             <i class="fas fa-share-alt mr-2"></i>SOCIAL MEDIA
                         </h3>
                         <div class="space-y-2 text-sm">
-                            <p><i class="fab fa-facebook mr-2"></i><a href="https://facebook.com/chariswordgospelministry" target="_blank" class="text-[#f58502] hover:underline">Charisword Gospel Ministry</a></p>
+                            <p><i class="fab fa-facebook mr-2"></i><a href="https://facebook.com/chariswordgospelministry" target="_blank" class="text-[#f5852] hover:underline">Charisword Gospel Ministry</a></p>
                             <p><i class="fab fa-instagram mr-2"></i><a href="https://instagram.com/charisword" target="_blank" class="text-[#f58502] hover:underline">@charisword</a></p>
                             <p><i class="fab fa-tiktok mr-2"></i><a href="https://tiktok.com/@charisword" target="_blank" class="text-[#f58502] hover:underline">@charisword</a></p>
                             <p><i class="fab fa-twitter mr-2"></i><a href="https://twitter.com/ChariswordM" target="_blank" class="text-[#f58502] hover:underline">@ChariswordM</a></p>

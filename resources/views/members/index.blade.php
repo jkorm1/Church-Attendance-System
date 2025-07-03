@@ -117,6 +117,12 @@
                             <i class="fas fa-star mr-2"></i>Leader Role
                         </th>
                         <th class="text-left">
+                            <i class="fas fa-user-friends mr-2"></i>Invitees
+                        </th>
+                        <th class="text-left">
+                            <i class="fas fa-seedling mr-2"></i>Planters
+                        </th>
+                        <th class="text-left">
                             <i class="fas fa-cogs mr-2"></i>Actions
                         </th>
                     </tr>
@@ -189,6 +195,12 @@
                             @else
                                 <span class="text-gray-400 text-sm">-</span>
                             @endif
+                        </td>
+                        <td>
+                            {{ $member->invitees_count }}
+                        </td>
+                        <td>
+                            {{ $member->planters_count }}
                         </td>
                         <td>
                             <div class="flex items-center gap-2">

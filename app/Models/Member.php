@@ -33,7 +33,17 @@ class Member extends Model
 
     public function invitees()
     {
-        return $this->hasMany(FirstTimer::class, 'invited_by');
+        return $this->hasMany(\App\Models\FirstTimer::class, 'invited_by');
+    }
+
+    public function getInviteesCountAttribute()
+    {
+        return $this->invitees()->count();
+    }
+
+    public function getPlantersCountAttribute()
+    {
+        return $this->invitees()->where('purpose', 'stay')->count();
     }
 
     public function attendances()

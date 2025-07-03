@@ -68,17 +68,16 @@
                 <label for="service_id" class="form-label">Filter by Service</label>
                 <select name="service_id" id="service_id" class="form-input">
                     <option value="">-- All Services --</option>
-                    @php
-                        $serviceGenerator = app(\App\Services\ServiceGeneratorService::class);
-                        $autoServices = collect($serviceGenerator->getAllServices(7));
-                        $manualServices = \App\Models\Service::orderBy('service_date', 'desc')->get();
-                        $allServices = $autoServices->merge($manualServices)->sortBy('service_date');
-                    @endphp
                     @foreach($allServices as $service)
-                        <option value="{{ $service['id'] ?? $service->id }}" @if(request('service_id') == ($service['id'] ?? $service->id)) selected @endif>
-                            {{ $service['name'] ?? $service->name }} ({{ \Carbon\Carbon::parse($service['service_date'] ?? $service->service_date)->format('D, d M Y') }})
-                            @if(isset($service['is_auto_generated']) && $service['is_auto_generated'])
-                                (Auto)
+                        <option value="{{ $service->id }}" @if(request('service_id') == $service->id) selected @endif>
+                            @if(!empty($service->is_auto) && $service->is_auto)
+                                @php
+                                    preg_match('/(\\d{4}-\\d{2}-\\d{2})/', $service->service_date, $matches);
+                                    $date = $matches[1] ?? $service->service_date;
+                                @endphp
+                                Auto Service ({{ \Carbon\Carbon::parse($date)->format('D, d M Y') }})
+                            @else
+                                {{ $service->name }} ({{ \Carbon\Carbon::parse($service->service_date)->format('D, d M Y') }})
                             @endif
                         </option>
                     @endforeach
@@ -100,18 +99,18 @@
     </div>
 
     <!-- Current Filter Info -->
-    @if($service || $date)
+    @if($serviceInfo || $date)
         <div class="glass-card p-6 bg-gradient-to-r from-blue-50 to-indigo-50">
             <div class="flex items-center justify-between">
                 <div>
                     <h4 class="text-lg font-bold text-[#3a1d09] mb-2">Current Filter</h4>
-                    @if($service)
+                    @if($serviceInfo)
                         <p class="text-[#f58502] font-semibold">
                             <i class="fas fa-church mr-2"></i>
-                            {{ is_array($service) ? $service['name'] : $service->name }}
+                            {{ $serviceInfo['name'] }}
                         </p>
                         <p class="text-sm text-gray-600">
-                            {{ \Carbon\Carbon::parse(is_array($service) ? $service['service_date'] : $service->service_date)->format('D, d M Y') }}
+                            {{ \Carbon\Carbon::parse($serviceInfo['service_date'])->format('D, d M Y') }}
                         </p>
                     @elseif($date)
                         <p class="text-[#f58502] font-semibold">

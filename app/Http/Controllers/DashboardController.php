@@ -59,6 +59,7 @@ class DashboardController extends Controller
 
         // Top Performers
         $topInviters = $this->getTopInviters();
+        $topPlanters = $this->getTopPlanters();
         $topCells = $this->getTopCells();
         $topFolds = $this->getTopFolds();
 
@@ -66,6 +67,11 @@ class DashboardController extends Controller
         $weeklyStats = $this->getWeeklyStats();
         $monthlyStats = $this->getMonthlyStats();
         $yearlyStats = $this->getYearlyStats();
+
+        $topInvitersByCell = $this->getTopInvitersByCell();
+        $topPlantersByCell = $this->getTopPlantersByCell();
+        $topInvitersByFold = $this->getTopInvitersByFold();
+        $topPlantersByFold = $this->getTopPlantersByFold();
 
         return view('dashboard', [
             'totalMembers' => $totalMembers,
@@ -78,11 +84,16 @@ class DashboardController extends Controller
             'conversionAnalytics' => $conversionAnalytics,
             'newMembersAnalytics' => $newMembersAnalytics,
             'topInviters' => $topInviters,
+            'topPlanters' => $topPlanters,
             'topCells' => $topCells,
             'topFolds' => $topFolds,
             'weeklyStats' => $weeklyStats,
             'monthlyStats' => $monthlyStats,
             'yearlyStats' => $yearlyStats,
+            'topInvitersByCell' => $topInvitersByCell,
+            'topPlantersByCell' => $topPlantersByCell,
+            'topInvitersByFold' => $topInvitersByFold,
+            'topPlantersByFold' => $topPlantersByFold,
         ]);
     }
 
@@ -152,13 +163,22 @@ class DashboardController extends Controller
 
     private function getTopInviters()
     {
-        return Member::withCount(['invitees' => function($query) {
-                $query->where('purpose', 'stay'); // Only count those who stayed
-            }])
+        return Member::withCount(['invitees'])
             ->having('invitees_count', '>', 0)
             ->orderByDesc('invitees_count')
             ->take(10)
             ->get();
+    }
+
+    private function getTopPlanters()
+    {
+        return Member::withCount(['invitees as planters_count' => function($query) {
+            $query->where('purpose', 'stay');
+        }])
+        ->having('planters_count', '>', 0)
+        ->orderByDesc('planters_count')
+        ->take(10)
+        ->get();
     }
 
     private function getTopCells()
@@ -421,5 +441,65 @@ class DashboardController extends Controller
     {
         $member = \App\Models\Member::with('cell', 'fold')->findOrFail($id);
         return view('dashboard.member_detail', compact('member'));
+    }
+
+    private function getTopInvitersByCell()
+    {
+        return \App\Models\Cell::with(['members' => function($q) {
+            $q->withCount('invitees');
+        }])->get()->map(function($cell) {
+            $best = $cell->members->sortByDesc('invitees_count')->first();
+            return $best && $best->invitees_count > 0 ? [
+                'cell' => $cell->name,
+                'member' => $best->name,
+                'count' => $best->invitees_count
+            ] : null;
+        })->filter()->values();
+    }
+
+    private function getTopPlantersByCell()
+    {
+        return \App\Models\Cell::with(['members' => function($q) {
+            $q->withCount(['invitees as planters_count' => function($query) {
+                $query->where('purpose', 'stay');
+            }]);
+        }])->get()->map(function($cell) {
+            $best = $cell->members->sortByDesc('planters_count')->first();
+            return $best && $best->planters_count > 0 ? [
+                'cell' => $cell->name,
+                'member' => $best->name,
+                'count' => $best->planters_count
+            ] : null;
+        })->filter()->values();
+    }
+
+    private function getTopInvitersByFold()
+    {
+        return \App\Models\Fold::with(['members' => function($q) {
+            $q->withCount('invitees');
+        }])->get()->map(function($fold) {
+            $best = $fold->members->sortByDesc('invitees_count')->first();
+            return $best && $best->invitees_count > 0 ? [
+                'fold' => $fold->name,
+                'member' => $best->name,
+                'count' => $best->invitees_count
+            ] : null;
+        })->filter()->values();
+    }
+
+    private function getTopPlantersByFold()
+    {
+        return \App\Models\Fold::with(['members' => function($q) {
+            $q->withCount(['invitees as planters_count' => function($query) {
+                $query->where('purpose', 'stay');
+            }]);
+        }])->get()->map(function($fold) {
+            $best = $fold->members->sortByDesc('planters_count')->first();
+            return $best && $best->planters_count > 0 ? [
+                'fold' => $fold->name,
+                'member' => $best->name,
+                'count' => $best->planters_count
+            ] : null;
+        })->filter()->values();
     }
 }
